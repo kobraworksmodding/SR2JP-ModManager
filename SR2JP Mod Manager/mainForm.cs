@@ -3,8 +3,8 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
+
 
 
 namespace SR2JP_Mod_Manager
@@ -95,6 +95,7 @@ namespace SR2JP_Mod_Manager
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
             // Initialise settings and such for the mod manager.
             GameLocation.Hide();
+            ExtractingBox.Hide();
             if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\settings.txt"))
             {
                 Global.SR2Location = File.ReadAllText($"{Global.appDataPath}\\settings.txt");
@@ -114,7 +115,7 @@ namespace SR2JP_Mod_Manager
                             "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Saints Row 2",
                             "Welcome to SR2JP Mod Manager",
                             MessageBoxButtons.OK,
-                            MessageBoxIcon.Information)) == DialogResult.OK);
+                            MessageBoxIcon.Information)) == DialogResult.OK) ;
                         {
                             LookForSR2();
                         }
@@ -129,22 +130,190 @@ namespace SR2JP_Mod_Manager
 
         private void importModToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (FindMod.ShowDialog() == DialogResult.OK)
+            {
+                ExtractingBox.Show();
+                ArchiveExtractor.Process(FindMod.FileName);
+                listView1.Items.Add("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName));
+                foreach (ListViewItem item in listView1.Items)
+                {
+                if (item.Text.Equals("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName), StringComparison.OrdinalIgnoreCase))
+                {
+                     item.Checked = true;
+                     break;
+                 }
+            }
+                ExtractingBox.Hide();
+                SaveLoadOrder();
+            }
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-
+            if (FindMod.ShowDialog() == DialogResult.OK)
+            {
+                ExtractingBox.Show();
+                ArchiveExtractor.Process(FindMod.FileName);
+                listView1.Items.Add("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName));
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    if (item.Text.Equals("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName), StringComparison.OrdinalIgnoreCase))
+                    {
+                        item.Checked = true;
+                        break;
+                    }
+                }
+                ExtractingBox.Hide();
+                SaveLoadOrder();
+            }
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
+            if (listView1.SelectedItems.Count == 0) return;
 
+            ListViewItem selectedItem = listView1.SelectedItems[0];
+            string curItem = selectedItem.Text;
+            if (curItem != "mods")
+            {
+                if (MessageBox.Show("Are you sure you would like to remove this mod entirely?\n\nThis cannot be un-done, all contents of the chosen mod will be permanently deleted.", "SR2JP Mod Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (Directory.Exists(Global.SR2Location + "\\" + curItem))
+                        Directory.Delete(Global.SR2Location + "\\" + curItem, true);
+                    selectedItem.Remove();
+                    SaveLoadOrder();
+                }
+            }
+            else
+            {
+                MessageBox.Show("You cannot remove your root mods directory.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TitleEditsMade()
+        {
+            this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}} -- (Unsaved Changes)";
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
+            if (listView1.SelectedItems.Count == 0) return;
 
+            ListViewItem selectedItem = listView1.SelectedItems[0];
+            selectedItem.Checked = false;
+            TitleEditsMade();
+        }
+
+        private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Created by Uzis as part of a Kobraworks Project.\n\n- 2026 -", "SR2JP Mod Manager");
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 0) return;
+
+            ListViewItem selectedItem = listView1.SelectedItems[0];
+            int index = selectedItem.Index;
+
+            if (index <= 0) return;
+
+            listView1.Items.RemoveAt(index);
+
+            listView1.Items.Insert(index - 1, selectedItem);
+
+            selectedItem.Selected = true;
+            selectedItem.Focused = true;
+            TitleEditsMade();
+        }
+
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 0) return;
+
+            ListViewItem selectedItem = listView1.SelectedItems[0];
+            int index = selectedItem.Index;
+
+            if (index >= listView1.Items.Count - 1) return;
+
+            listView1.Items.RemoveAt(index);
+
+            listView1.Items.Insert(index + 1, selectedItem);
+
+            selectedItem.Selected = true;
+            selectedItem.Focused = true;
+            TitleEditsMade();
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 0) return;
+
+            ListViewItem selectedItem = listView1.SelectedItems[0];
+            selectedItem.Checked = true;
+            TitleEditsMade();
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+
+        }
+
+        private void listView1_ColumnReordered(object sender, ColumnReorderedEventArgs e)
+        {
+
+        }
+
+        public void SaveLoadOrder()
+        {
+            if (listView1.Items.Count == 0)
+            {
+                MessageBox.Show("Cannot save! There is nothing in the load order!", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                if (!Directory.Exists(Path.Combine(Global.SR2Location, "mods"))) ;
+                {
+                    Directory.CreateDirectory(Path.Combine(Global.SR2Location, "mods"));
+                }
+                string LooseText = Global.SR2Location + "\\loose.txt";
+                try
+                {
+                    File.WriteAllText(LooseText, string.Empty);
+                    foreach (ListViewItem item in listView1.Items)
+                    {
+                        if (!item.Checked)
+                        {
+                            item.Text = "--" + item.Text;
+                        }
+                        using (StreamWriter writer = new StreamWriter(LooseText, true))
+                        {
+                            writer.WriteLine(item.Text);
+                        }
+                        if (!item.Checked)
+                        {
+                            item.Text = item.Text.Substring(2);
+                        }
+                    }
+                    MessageBox.Show("Load Order has saved successfully.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Oops, Looks like we ran into an error.\n\n" + ex.Message + "\n\nPlease report this to a SR2JP Mod Manager Developer.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+        }
+        private void saveLoadOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveLoadOrder();
         }
     }
 }

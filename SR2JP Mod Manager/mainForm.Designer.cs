@@ -33,9 +33,12 @@
             this.GameLocation = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resetLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.conflictCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -43,11 +46,9 @@
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.conflictCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.FindMod = new System.Windows.Forms.OpenFileDialog();
+            this.ExtractingBox = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -83,31 +84,54 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetLoadOrderToolStripMenuItem,
             this.saveLoadOrderToolStripMenuItem,
             this.importModToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // resetLoadOrderToolStripMenuItem
-            // 
-            this.resetLoadOrderToolStripMenuItem.Name = "resetLoadOrderToolStripMenuItem";
-            this.resetLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.resetLoadOrderToolStripMenuItem.Text = "Reset Load Order";
-            // 
             // saveLoadOrderToolStripMenuItem
             // 
             this.saveLoadOrderToolStripMenuItem.Name = "saveLoadOrderToolStripMenuItem";
-            this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.saveLoadOrderToolStripMenuItem.Text = "Save Load Order";
+            this.saveLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.saveLoadOrderToolStripMenuItem_Click);
             // 
             // importModToolStripMenuItem
             // 
             this.importModToolStripMenuItem.Name = "importModToolStripMenuItem";
-            this.importModToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importModToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.importModToolStripMenuItem.Text = "Import Mod";
             this.importModToolStripMenuItem.Click += new System.EventHandler(this.importModToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.conflictCheckerToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // conflictCheckerToolStripMenuItem
+            // 
+            this.conflictCheckerToolStripMenuItem.Name = "conflictCheckerToolStripMenuItem";
+            this.conflictCheckerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.conflictCheckerToolStripMenuItem.Text = "Conflict Checker";
+            // 
+            // infoToolStripMenuItem
+            // 
+            this.infoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.creditsToolStripMenuItem});
+            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.infoToolStripMenuItem.Text = "Info";
+            // 
+            // creditsToolStripMenuItem
+            // 
+            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.creditsToolStripMenuItem.Text = "Credits";
+            this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -155,6 +179,7 @@
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(23, 25);
             this.toolStripButton3.Text = "Enable Mod";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripButton4
             // 
@@ -174,6 +199,7 @@
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(23, 25);
             this.toolStripButton5.Text = "Raise Mod In Order";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // toolStripButton6
             // 
@@ -183,34 +209,7 @@
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(23, 25);
             this.toolStripButton6.Text = "Lower Mod In Order";
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.conflictCheckerToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // infoToolStripMenuItem
-            // 
-            this.infoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.creditsToolStripMenuItem});
-            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
-            this.infoToolStripMenuItem.Text = "Info";
-            // 
-            // creditsToolStripMenuItem
-            // 
-            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.creditsToolStripMenuItem.Text = "Credits";
-            // 
-            // conflictCheckerToolStripMenuItem
-            // 
-            this.conflictCheckerToolStripMenuItem.Name = "conflictCheckerToolStripMenuItem";
-            this.conflictCheckerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.conflictCheckerToolStripMenuItem.Text = "Conflict Checker";
+            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // listView1
             // 
@@ -220,8 +219,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.CheckBoxes = true;
+            this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(0, 55);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
@@ -229,12 +230,31 @@
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
+            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
+            // FindMod
+            // 
+            this.FindMod.Filter = "Popular Archives|*.zip;*.7z;*.rar|Zip Archive|*.zip|7-ZIP Archive|*.7z|RAR Archiv" +
+    "e|*.rar";
+            this.FindMod.Tag = "";
+            // 
+            // ExtractingBox
+            // 
+            this.ExtractingBox.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.ExtractingBox.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.Extracting;
+            this.ExtractingBox.Location = new System.Drawing.Point(445, 168);
+            this.ExtractingBox.Name = "ExtractingBox";
+            this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
+            this.ExtractingBox.TabIndex = 4;
             // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ExtractingBox);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.GameLocation);
@@ -242,6 +262,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "mainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Saints Row 2: Juiced Patch Mod Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -259,7 +280,6 @@
         private System.Windows.Forms.Label GameLocation;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem resetLoadOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveLoadOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importModToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
@@ -274,6 +294,8 @@
         private System.Windows.Forms.ToolStripMenuItem creditsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem conflictCheckerToolStripMenuItem;
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.OpenFileDialog FindMod;
+        private System.Windows.Forms.Panel ExtractingBox;
     }
 }
 
