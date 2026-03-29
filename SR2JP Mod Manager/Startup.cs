@@ -15,7 +15,7 @@ namespace SR2JP_Mod_Manager
             {
                 string fullPath = Path.Combine(Global.SR2Location, fileName);
 
-                if (!File.Exists(fullPath))
+                if (File.Exists(fullPath))
                 {
                     //MessageBox.Show($"{fileName} exists.");
                 }
@@ -27,7 +27,7 @@ namespace SR2JP_Mod_Manager
                             "\n\nThis is okay for now but be warned that none of the mods you manage currently" +
                             "\nwill likely be loaded into your game." +
                             "\n\nPlease install the latest version of Juiced Patch if you want to use your mods.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        bIsJuicedInstalled = false;  
+                        bIsJuicedInstalled = false;
                     }
                 }
             }

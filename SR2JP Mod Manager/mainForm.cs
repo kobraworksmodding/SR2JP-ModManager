@@ -16,24 +16,49 @@ namespace SR2JP_Mod_Manager
             InitializeComponent();
         }
 
+        public void FillModList()
+        {
+            string looseTxt = Path.Combine(Global.SR2Location, "loose.txt");
+            if (File.Exists(looseTxt))
+            {
+                string[] looseMods = File.ReadAllLines(looseTxt);
+                listView1.Columns.Add("Mods", listView1.ClientSize.Width);
+                foreach (string mod in looseMods)
+                {
+                    if (!string.IsNullOrEmpty(mod))
+                    {
+                        listView1.Items.Add(mod);
+                    }
+                }
+            }
+        }
+
+        public void PerformStartupThings()
+        {
+            Startup.CheckForJuicedPatch();
+            bHasReadFirstMessage = true;
+            FillModList();
+            GameLocation.Text = $"SR2 Location: {Global.SR2Location}";
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             // Initialize the Form Name w/ Previous Git Hash.
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
+            GameLocation.Hide();
             if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\settings.txt"))
             {
                 Global.SR2Location = File.ReadAllText($"{Global.appDataPath}\\settings.txt");
-                if (!(Global.SR2Location == null))
+                if (!string.IsNullOrEmpty(Global.SR2Location))
                 {
-                    Startup.CheckForJuicedPatch();
-                    bHasReadFirstMessage = true;
+                    PerformStartupThings();
                 }
             }
             else
             {
                 if (bHasReadFirstMessage == false)
                 {
-                    if (Global.SR2Location != null || Global.SR2Location == "")
+                    if (string.IsNullOrEmpty(Global.SR2Location))
                     {
                         if ((MessageBox.Show("To get started, first off we need to know where your Saints Row 2 Game Directory is located!\n\n" +
                             "If you're using the Steam version its typically in\n\n" +
@@ -54,11 +79,32 @@ namespace SR2JP_Mod_Manager
                                 Global.SR2Location = filePath;
                             }
                         }
-                        Startup.CheckForJuicedPatch();
-                        bHasReadFirstMessage = true;
+                        PerformStartupThings();
                     }
                 }
             }
+            GameLocation.Show();
+
+        }
+
+        private void importModToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
