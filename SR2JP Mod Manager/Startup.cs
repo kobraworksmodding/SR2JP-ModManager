@@ -9,7 +9,7 @@ namespace SR2JP_Mod_Manager
         public static bool bIsJuicedInstalled = true;
         public static void CheckForJuicedPatch()
         {
-            string[] CommonFiles = { "juiced.ini", "loose.txt", "SDL3.dll" };
+            string[] CommonFiles = { "juiced.ini", "loose.txt" };
 
             foreach (var fileName in CommonFiles)
             {
