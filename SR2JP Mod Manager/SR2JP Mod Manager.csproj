@@ -81,6 +81,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveExtractor.cs" />
+    <Compile Include="Duplicates.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Duplicates.Designer.cs">
+      <DependentUpon>Duplicates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileChecker.cs" />
     <Compile Include="GitInfo.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="mainForm.cs">
@@ -92,6 +99,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <EmbeddedResource Include="Duplicates.resx">
+      <DependentUpon>Duplicates.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -121,6 +131,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Extracting.png" />
+    <None Include="Resources\import.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\enable.png" />
+    <None Include="Resources\disable.png" />
+    <None Include="Resources\raiseorder.png" />
+    <None Include="Resources\lowerorder.png" />
     <Content Include="sr2jpmodmanager.ico" />
   </ItemGroup>
   <Target Name="GenerateGitInfo" BeforeTargets="BeforeBuild">

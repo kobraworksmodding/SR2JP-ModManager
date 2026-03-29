@@ -33,22 +33,22 @@
             this.GameLocation = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.conflictCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.FindMod = new System.Windows.Forms.OpenFileDialog();
+            this.ExtractingBox = new System.Windows.Forms.Panel();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.FindMod = new System.Windows.Forms.OpenFileDialog();
-            this.ExtractingBox = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -84,18 +84,12 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveLoadOrderToolStripMenuItem,
-            this.importModToolStripMenuItem});
+            this.importModToolStripMenuItem,
+            this.saveLoadOrderToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
-            // 
-            // saveLoadOrderToolStripMenuItem
-            // 
-            this.saveLoadOrderToolStripMenuItem.Name = "saveLoadOrderToolStripMenuItem";
-            this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.saveLoadOrderToolStripMenuItem.Text = "Save Load Order";
-            this.saveLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.saveLoadOrderToolStripMenuItem_Click);
+            this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // importModToolStripMenuItem
             // 
@@ -103,6 +97,13 @@
             this.importModToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.importModToolStripMenuItem.Text = "Import Mod";
             this.importModToolStripMenuItem.Click += new System.EventHandler(this.importModToolStripMenuItem_Click);
+            // 
+            // saveLoadOrderToolStripMenuItem
+            // 
+            this.saveLoadOrderToolStripMenuItem.Name = "saveLoadOrderToolStripMenuItem";
+            this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.saveLoadOrderToolStripMenuItem.Text = "Save Load Order";
+            this.saveLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.saveLoadOrderToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -117,6 +118,7 @@
             this.conflictCheckerToolStripMenuItem.Name = "conflictCheckerToolStripMenuItem";
             this.conflictCheckerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.conflictCheckerToolStripMenuItem.Text = "Conflict Checker";
+            this.conflictCheckerToolStripMenuItem.Click += new System.EventHandler(this.conflictCheckerToolStripMenuItem_Click);
             // 
             // infoToolStripMenuItem
             // 
@@ -149,67 +151,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(800, 28);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.AutoSize = false;
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 25);
-            this.toolStripButton1.Text = "Import Mod";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 25);
-            this.toolStripButton2.Text = "Delete Selected Mod";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 25);
-            this.toolStripButton3.Text = "Enable Mod";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
-            // 
-            // toolStripButton4
-            // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(23, 25);
-            this.toolStripButton4.Text = "Disable Mod";
-            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
-            // 
-            // toolStripButton5
-            // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(23, 25);
-            this.toolStripButton5.Text = "Raise Mod In Order";
-            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
-            // 
-            // toolStripButton6
-            // 
-            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
-            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(23, 25);
-            this.toolStripButton6.Text = "Lower Mod In Order";
-            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // listView1
             // 
@@ -248,6 +189,67 @@
             this.ExtractingBox.Name = "ExtractingBox";
             this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
             this.ExtractingBox.TabIndex = 4;
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.AutoSize = false;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::SR2JP_Mod_Manager.Properties.Resources.import;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton1.Text = "Import Mod";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::SR2JP_Mod_Manager.Properties.Resources.delete;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton2.Text = "Delete Selected Mod";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = global::SR2JP_Mod_Manager.Properties.Resources.enable;
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton3.Text = "Enable Mod";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = global::SR2JP_Mod_Manager.Properties.Resources.disable;
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton4.Text = "Disable Mod";
+            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = global::SR2JP_Mod_Manager.Properties.Resources.raiseorder;
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton5.Text = "Raise Mod In Order";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
+            // 
+            // toolStripButton6
+            // 
+            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton6.Image = global::SR2JP_Mod_Manager.Properties.Resources.lowerorder;
+            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Name = "toolStripButton6";
+            this.toolStripButton6.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton6.Text = "Lower Mod In Order";
+            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // mainForm
             // 

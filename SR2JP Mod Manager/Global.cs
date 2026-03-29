@@ -8,5 +8,6 @@ namespace SR2JP_Mod_Manager
         public static string SR2Location = ""; // "JoeBloggs/Desktop/SaintsRow2FreeDownload" 
         public static string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SR2JP_Mod_Manager");
         public static bool bAddToList = false;
+        public static int numOfDupes = 0;
     }
 }

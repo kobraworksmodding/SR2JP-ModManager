@@ -12,7 +12,6 @@ namespace SR2JP_Mod_Manager
             string extractTo = $"{Global.SR2Location}\\mods";
             string[] targetExtensions = { ".XTBL", ".peg_pc", ".chunk_pc", ".lua", ".cts", ".le_strings", ".idx_map", ".xsb", ".xwb", ".anim_pc", ".fxo_pc", ".g_peg_pc" };
 
-            // Folder name for root-level extraction
             string archiveName = Path.GetFileNameWithoutExtension(archivePath);
 
             using (var archive = ArchiveFactory.OpenArchive(archivePath))
@@ -42,7 +41,6 @@ namespace SR2JP_Mod_Manager
 
                             Directory.CreateDirectory(extractPath);
 
-                            // Extract all files in the same folder (or root)
                             foreach (var e in archive.Entries)
                             {
                                 if (e.IsDirectory)
@@ -53,7 +51,6 @@ namespace SR2JP_Mod_Manager
 
                                 if (sameFolder)
                                 {
-                                    // Build target file path (avoid double folders)
                                     string targetFilePath = Path.Combine(extractPath, Path.GetFileName(e.Key));
 
                                     using (var entryStream = e.OpenEntryStream())

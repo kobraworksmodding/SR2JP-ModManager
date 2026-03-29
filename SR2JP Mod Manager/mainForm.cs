@@ -2,6 +2,7 @@
 // Created by Uzis: 3/29/2026
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -314,6 +315,17 @@ namespace SR2JP_Mod_Manager
         private void saveLoadOrderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveLoadOrder();
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void conflictCheckerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Duplicates form2 = new Duplicates();
+            form2.ShowDialog(); // Opens Form2 as a modal dialog (blocks Form1 until closed)
         }
     }
 }
