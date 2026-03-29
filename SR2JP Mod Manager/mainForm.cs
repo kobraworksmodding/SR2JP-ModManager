@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 
@@ -41,6 +42,32 @@ namespace SR2JP_Mod_Manager
             GameLocation.Text = $"SR2 Location: {Global.SR2Location}";
         }
 
+        public void LookForSR2()
+        {
+            if (findSR2dialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = findSR2dialog.SelectedPath;
+                //MessageBox.Show(filePath);
+                if (File.Exists($"{filePath}\\sr2_pc.exe"))
+                {
+                    if (!Directory.Exists(Global.appDataPath)) // Check if our settings path exists, if not, create it.
+                    {
+                        Directory.CreateDirectory(Global.appDataPath);
+                    }
+                    File.WriteAllText($"{Global.appDataPath}\\settings.txt", filePath); // Create a simple settings.txt with our SR2 directory path that we can also edit later.
+                    Global.SR2Location = filePath;
+                }
+                else
+                {
+                    MessageBox.Show("This location selected does not have the\nSaints Row 2 executable binary in it (sr2_pc.exe)\n\nPlease select the right installation location.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LookForSR2();
+                }
+            }
+            else
+            {
+                Application.Exit();
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             // Initialize the Form Name w/ Previous Git Hash.
@@ -65,20 +92,11 @@ namespace SR2JP_Mod_Manager
                             "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Saints Row 2",
                             "Welcome to SR2JP Mod Manager",
                             MessageBoxButtons.OK,
-                            MessageBoxIcon.Information)) == DialogResult.OK) ;
+                            MessageBoxIcon.Information)) == DialogResult.OK);
                         {
-                            if (findSR2dialog.ShowDialog() == DialogResult.OK)
-                            {
-                                string filePath = findSR2dialog.SelectedPath;
-                                //MessageBox.Show(filePath);
-                                if (!Directory.Exists(Global.appDataPath)) // Check if our settings path exists, if not, create it.
-                                {
-                                    Directory.CreateDirectory(Global.appDataPath);
-                                }
-                                File.WriteAllText($"{Global.appDataPath}\\settings.txt", filePath); // Create a simple settings.txt with our SR2 directory path that we can also edit later.
-                                Global.SR2Location = filePath;
-                            }
+                            LookForSR2();
                         }
+
                         PerformStartupThings();
                     }
                 }
