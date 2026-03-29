@@ -17,7 +17,7 @@ namespace SR2JP_Mod_Manager
             InitializeComponent();
         }
 
-        public void FillModList()
+        public void FillModList() // Fill mod list based on loose.txt in game files, if it exists.
         {
             string looseTxt = Path.Combine(Global.SR2Location, "loose.txt");
             if (File.Exists(looseTxt))
@@ -29,20 +29,41 @@ namespace SR2JP_Mod_Manager
                     if (!string.IsNullOrEmpty(mod))
                     {
                         listView1.Items.Add(mod);
+
+                    }
+                }
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    try
+                    {
+                        if (item.SubItems[0].Text.StartsWith("--"))
+                        {
+                            item.Checked = false;
+                            item.SubItems[0].Text = item.SubItems[0].Text.Substring(2);
+
+                        }
+                        else
+                        {
+                            item.Checked = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
                     }
                 }
             }
         }
 
         public void PerformStartupThings()
-        {
+        { // Do startup stuff, put this in its own function because the code is pasted twice, cleaner to just reference a function twice rather than create 4 lines of code twice.
             Startup.CheckForJuicedPatch();
             bHasReadFirstMessage = true;
             FillModList();
             GameLocation.Text = $"SR2 Location: {Global.SR2Location}";
         }
 
-        public void LookForSR2()
+        public void LookForSR2() // Look for saints row 2 directory.
         {
             if (findSR2dialog.ShowDialog() == DialogResult.OK)
             {
@@ -72,6 +93,7 @@ namespace SR2JP_Mod_Manager
         {
             // Initialize the Form Name w/ Previous Git Hash.
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
+            // Initialise settings and such for the mod manager.
             GameLocation.Hide();
             if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\settings.txt"))
             {
