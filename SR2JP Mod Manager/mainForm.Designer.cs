@@ -29,7 +29,13 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            this.findSR2dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.SuspendLayout();
+            // 
+            // findSR2dialog
+            // 
+            this.findSR2dialog.Description = "Lead us to the folder that has SR2_pc.exe";
+            this.findSR2dialog.ShowNewFolderButton = false;
             // 
             // mainForm
             // 
@@ -40,12 +46,13 @@
             this.Name = "mainForm";
             this.Text = "Saints Row 2: Juiced Patch Mod Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.FolderBrowserDialog findSR2dialog;
     }
 }
 
