@@ -4,15 +4,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 
 
 namespace SR2JP_Mod_Manager
 {
+
     public partial class mainForm : Form
     {
         bool bHasReadFirstMessage = false; // Just a hack if necessary to make it so the message doesn't pop twice at once.
+        private static Mutex mutex = null;
+
+
         public mainForm()
         {
             InitializeComponent();
@@ -90,8 +95,21 @@ namespace SR2JP_Mod_Manager
                 Application.Exit();
             }
         }
+        [STAThread]
         private void Form1_Load(object sender, EventArgs e)
         {
+            const string appName = "SR2JP_MOD_MANAGER";
+            bool createdNew;
+
+            mutex = new Mutex(true, appName, out createdNew);
+
+            if (!createdNew)
+            {
+                MessageBox.Show("There is already an instance of SR2JP Mod Manager running.", "SR2JP Mod Manager");
+                Application.Exit();
+                return;
+            }
+
             // Initialize the Form Name w/ Previous Git Hash.
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
             // Initialise settings and such for the mod manager.
