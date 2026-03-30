@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -29,7 +30,7 @@ namespace SR2JP_Mod_Manager
             if (File.Exists(looseTxt))
             {
                 string[] looseMods = File.ReadAllLines(looseTxt);
-                listView1.Columns.Add("Mods", listView1.ClientSize.Width);
+                listView1.Columns.Add("Load Order - Installed Mods", 9999); // Big width so list doesn't look awkward on most screens when maximized.
                 foreach (string mod in looseMods)
                 {
                     if (!string.IsNullOrEmpty(mod))
@@ -42,6 +43,9 @@ namespace SR2JP_Mod_Manager
                 {
                     try
                     {
+                        if (item.SubItems[0].Text.Contains("\\")) {
+                            item.SubItems[0].Text = Global.NormalizePathFmt(item.SubItems[0].Text);
+                        }
                         if (item.SubItems[0].Text.StartsWith("--"))
                         {
                             item.Checked = false;
@@ -115,6 +119,7 @@ namespace SR2JP_Mod_Manager
             // Initialise settings and such for the mod manager.
             GameLocation.Hide();
             ExtractingBox.Hide();
+            listView1.AllowDrop = true;
             if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\settings.txt"))
             {
                 Global.SR2Location = File.ReadAllText($"{Global.appDataPath}\\settings.txt");
@@ -152,16 +157,17 @@ namespace SR2JP_Mod_Manager
             if (FindMod.ShowDialog() == DialogResult.OK)
             {
                 ExtractingBox.Show();
-                ArchiveExtractor.Process(FindMod.FileName);
-                listView1.Items.Add("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName));
-                foreach (ListViewItem item in listView1.Items)
+                var folders = ArchiveExtractor.Process(FindMod.FileName);
+
+                foreach (var f in folders)
                 {
-                if (item.Text.Equals("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName), StringComparison.OrdinalIgnoreCase))
-                {
-                     item.Checked = true;
-                     break;
-                 }
-            }
+                    string folderText = f.ToString();
+
+                    var newItem = listView1.Items.Insert(0, folderText);
+
+                    newItem.Checked = true;
+                }
+
                 ExtractingBox.Hide();
                 SaveLoadOrder();
             }
@@ -172,16 +178,17 @@ namespace SR2JP_Mod_Manager
             if (FindMod.ShowDialog() == DialogResult.OK)
             {
                 ExtractingBox.Show();
-                ArchiveExtractor.Process(FindMod.FileName);
-                listView1.Items.Add("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName));
-                foreach (ListViewItem item in listView1.Items)
+                var folders = ArchiveExtractor.Process(FindMod.FileName);
+
+                foreach (var f in folders)
                 {
-                    if (item.Text.Equals("mods\\" + Path.GetFileNameWithoutExtension(FindMod.FileName), StringComparison.OrdinalIgnoreCase))
-                    {
-                        item.Checked = true;
-                        break;
-                    }
+                    string folderText = f.ToString();
+
+                    var newItem = listView1.Items.Insert(0, folderText);
+
+                    newItem.Checked = true;
                 }
+
                 ExtractingBox.Hide();
                 SaveLoadOrder();
             }
@@ -193,20 +200,46 @@ namespace SR2JP_Mod_Manager
 
             ListViewItem selectedItem = listView1.SelectedItems[0];
             string curItem = selectedItem.Text;
-            if (curItem != "mods")
-            {
-                if (MessageBox.Show("Are you sure you would like to remove this mod entirely?\n\nThis cannot be un-done, all contents of the chosen mod will be permanently deleted.", "SR2JP Mod Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    if (Directory.Exists(Global.SR2Location + "\\" + curItem))
-                        Directory.Delete(Global.SR2Location + "\\" + curItem, true);
-                    selectedItem.Remove();
-                    SaveLoadOrder();
-                }
-            }
-            else
+
+            if (curItem.Equals("mods", StringComparison.OrdinalIgnoreCase))
             {
                 MessageBox.Show("You cannot remove your root mods directory.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+            // Ask for confirmation
+            if (MessageBox.Show(
+                "Are you sure you would like to remove this mod entirely?\n\nThis cannot be undone. All contents of the chosen mod will be permanently deleted.",
+                "SR2JP Mod Manager", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            {
+                return;
+            }
+
+            // Extract the mod root folder (everything under "mods/ModName")
+            string modsRootPath = Path.Combine(Global.SR2Location, "mods");
+            string modRootName = curItem.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];
+            string modFullPath = Path.Combine(modsRootPath, modRootName);
+
+            // Delete folder from disk (if it exists)
+            if (Directory.Exists(modFullPath))
+            {
+                Directory.Delete(modFullPath, true); // recursive delete
+            }
+
+            // Remove all ListView items that belong to this mod
+            for (int i = listView1.Items.Count - 1; i >= 0; i--)
+            {
+                ListViewItem item = listView1.Items[i];
+                string itemText = item.Text.Replace('\\', '/'); // normalize slashes
+
+                if (itemText.StartsWith($"mods/{modRootName}/", StringComparison.OrdinalIgnoreCase) ||
+                    itemText.Equals($"mods/{modRootName}", StringComparison.OrdinalIgnoreCase))
+                {
+                    listView1.Items.RemoveAt(i);
+                }
+            }
+
+            SaveLoadOrder();
         }
 
         private void TitleEditsMade()
@@ -301,7 +334,7 @@ namespace SR2JP_Mod_Manager
                 {
                     Directory.CreateDirectory(Path.Combine(Global.SR2Location, "mods"));
                 }
-                string LooseText = Global.SR2Location + "\\loose.txt";
+                string LooseText = Global.SR2Location + "/loose.txt";
                 try
                 {
                     File.WriteAllText(LooseText, string.Empty);
@@ -343,7 +376,7 @@ namespace SR2JP_Mod_Manager
         private void conflictCheckerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Duplicates form2 = new Duplicates();
-            form2.ShowDialog(); // Opens Form2 as a modal dialog (blocks Form1 until closed)
+            form2.ShowDialog(); 
         }
 
         private void scanForModsNotInLoadOrderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -371,7 +404,7 @@ namespace SR2JP_Mod_Manager
                 if (!existingItems.Contains(normalizedPath))
                 {
                     numFolders++;
-                    listView1.Items.Add(displayPath);
+                    listView1.Items.Insert(0, displayPath);
                     existingItems.Add(normalizedPath);
                 }
             }
@@ -382,6 +415,118 @@ namespace SR2JP_Mod_Manager
             else
             {
                 MessageBox.Show("Found " + numFolders + " missing mods.\n\n They've now been added to your load order.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                TitleEditsMade();
+            }
+        }
+
+        private ListViewItem draggedItem;
+        private void listView1_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            draggedItem = (ListViewItem)e.Item;
+            listView1.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void listView1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListViewItem)))
+                e.Effect = DragDropEffects.Move;
+        }
+
+        private void listView1_DragDrop(object sender, DragEventArgs e)
+        {
+            Point cp = listView1.PointToClient(new Point(e.X, e.Y));
+            ListViewItem targetItem = listView1.GetItemAt(cp.X, cp.Y);
+
+            if (targetItem == null || draggedItem == null)
+                return;
+
+            int targetIndex = targetItem.Index;
+            int draggedIndex = draggedItem.Index;
+
+            if (draggedIndex == targetIndex)
+                return;
+
+            if (cp.Y > targetItem.Bounds.Top + targetItem.Bounds.Height / 2)
+            {
+                targetIndex++;
+            }
+            // Remove and insert at new position
+            listView1.Items.Remove(draggedItem);
+            listView1.Items.Insert(targetIndex, draggedItem);
+            draggedItem.Selected = true;
+            TitleEditsMade();
+        }
+
+        private void listView1_DragOver(object sender, DragEventArgs e)
+        {
+            Point cp = listView1.PointToClient(new Point(e.X, e.Y));
+            ListViewItem hoverItem = listView1.GetItemAt(cp.X, cp.Y);
+
+            if (hoverItem != null)
+            {
+                hoverItem.Selected = true;
+            }
+
+        }
+
+        private void listView1_KeyUp(object sender, KeyEventArgs e)
+        {
+           
+        }
+
+        private void listView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.W)
+            {
+                if (listView1.SelectedItems.Count == 0) return;
+
+                ListViewItem selectedItem = listView1.SelectedItems[0];
+                int index = selectedItem.Index;
+
+                if (index <= 0) return;
+
+                listView1.Items.RemoveAt(index);
+
+                listView1.Items.Insert(index - 1, selectedItem);
+
+                selectedItem.Selected = true;
+                selectedItem.Focused = true;
+                TitleEditsMade();
+            }
+
+            if (e.KeyCode == Keys.S)
+            {
+                if (listView1.SelectedItems.Count == 0) return;
+
+                ListViewItem selectedItem = listView1.SelectedItems[0];
+                int index = selectedItem.Index;
+
+                if (index >= listView1.Items.Count - 1) return;
+
+                listView1.Items.RemoveAt(index);
+
+                listView1.Items.Insert(index + 1, selectedItem);
+
+                selectedItem.Selected = true;
+                selectedItem.Focused = true;
+                TitleEditsMade();
+            }
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                ListViewItem selectedItem = listView1.SelectedItems[0];
+                if (selectedItem.Checked == true)
+                {
+                    if (listView1.SelectedItems.Count == 0) return;
+                    selectedItem.Checked = false;
+                    TitleEditsMade();
+                }
+                else
+                {
+                    if (listView1.SelectedItems.Count == 0) return;
+                    selectedItem.Checked = true;
+                    TitleEditsMade();
+                }
             }
         }
     }

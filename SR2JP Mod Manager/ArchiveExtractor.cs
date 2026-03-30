@@ -1,81 +1,120 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using SharpCompress.Archives;
-using SharpCompress.Common;
 
 namespace SR2JP_Mod_Manager
 {
+    public struct ExtractedFolder
+    {
+        public string FolderPath;   // Path relative to "mods" folder (normalized)
+        public string ExtractPath;  // Full path on disk
+
+        public ExtractedFolder(string folderPath, string extractPath)
+        {
+            FolderPath = folderPath;
+            ExtractPath = extractPath;
+        }
+
+        public override string ToString() => FolderPath;
+    }
+
     class ArchiveExtractor
     {
-        public static void Process(string archivePath)
+        private static string GetRelativeToMods(string fullPath, string modsRoot)
         {
-            string extractTo = $"{Global.SR2Location}\\mods";
-            string[] targetExtensions = { ".XTBL", ".peg_pc", ".chunk_pc", ".lua", ".cts", ".le_strings", ".idx_map", ".xsb", ".xwb", ".anim_pc", ".fxo_pc", ".g_peg_pc" };
+            fullPath = Path.GetFullPath(fullPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            modsRoot = Path.GetFullPath(modsRoot).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-            string archiveName = Path.GetFileNameWithoutExtension(archivePath);
+            if (!fullPath.StartsWith(modsRoot, StringComparison.OrdinalIgnoreCase))
+            {
+                // fallback: just return folder name prefixed with "mods"
+                return Global.NormalizePathFmt(Path.Combine("mods", Path.GetFileName(fullPath)));
+            }
+
+            string relative = fullPath.Substring(modsRoot.Length);
+            if (relative.StartsWith(Path.DirectorySeparatorChar.ToString()) || relative.StartsWith(Path.AltDirectorySeparatorChar.ToString()))
+                relative = relative.Substring(1);
+
+            // Normalize slashes
+            relative = Global.NormalizePathFmt(relative);
+
+            return Global.NormalizePathFmt(Path.Combine("mods", relative));
+        }
+
+        public static List<ExtractedFolder> Process(string archivePath)
+        {
+            string modsRoot = Path.Combine(Global.SR2Location, "mods");
+            string[] targetExtensions = {
+                ".XTBL", ".peg_pc", ".chunk_pc", ".lua", ".cts",
+                ".le_strings", ".idx_map", ".xsb", ".xwb",
+                ".anim_pc", ".fxo_pc", ".g_peg_pc", ".smesh_pc", ".cmesh_pc"
+            };
+
+            var extractedFolders = new List<ExtractedFolder>();
 
             using (var archive = ArchiveFactory.OpenArchive(archivePath))
             {
-                bool found = false;
+                // Find all folders containing target files
+                var foldersWithTargets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
                 foreach (var entry in archive.Entries)
                 {
-                    if (entry.IsDirectory)
-                        continue;
+                    if (entry.IsDirectory) continue;
 
                     string ext = Path.GetExtension(entry.Key);
+                    if (!targetExtensions.Any(t => string.Equals(t, ext, StringComparison.OrdinalIgnoreCase)))
+                        continue;
 
-                    foreach (var targetExt in targetExtensions)
+                    string folderInArchive = Path.GetDirectoryName(entry.Key) ?? "";
+                    folderInArchive = Global.NormalizePathFmt(folderInArchive);
+                    foldersWithTargets.Add(folderInArchive);
+                }
+
+                if (foldersWithTargets.Count == 0)
+                {
+                    Console.WriteLine("No target files found in archive.");
+                    return extractedFolders;
+                }
+
+                foreach (var folder in foldersWithTargets)
+                {
+                    // Compute full extraction path inside mods
+                    string fullExtractPath = Path.Combine(modsRoot, folder.Replace('/', Path.DirectorySeparatorChar));
+                    Directory.CreateDirectory(fullExtractPath);
+
+                    foreach (var entry in archive.Entries)
                     {
-                       
-                        if (string.Equals(ext, targetExt, StringComparison.OrdinalIgnoreCase))
+                        if (entry.IsDirectory) continue;
+
+                        string entryFolder = Path.GetDirectoryName(entry.Key) ?? "";
+                        entryFolder = Global.NormalizePathFmt(entryFolder);
+
+                        if (!string.Equals(entryFolder, folder, StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        string targetFilePath = Path.Combine(fullExtractPath, Path.GetFileName(entry.Key));
+
+                        using (var entryStream = entry.OpenEntryStream())
+                        using (var fileStream = File.Create(targetFilePath))
                         {
-                            // Determine folder inside archive
-                            string folderPathInArchive = Path.GetDirectoryName(entry.Key)?.Replace('/', Path.DirectorySeparatorChar);
-                            bool isRootFile = string.IsNullOrEmpty(folderPathInArchive);
-
-                            // Determine extraction folder
-                            string extractPath = isRootFile
-                                ? Path.Combine(extractTo, archiveName) 
-                                : Path.Combine(extractTo, folderPathInArchive);
-
-                            Directory.CreateDirectory(extractPath);
-
-                            foreach (var e in archive.Entries)
-                            {
-                                if (e.IsDirectory)
-                                    continue;
-
-                                string entryFolder = Path.GetDirectoryName(e.Key)?.Replace('/', Path.DirectorySeparatorChar);
-                                bool sameFolder = string.Equals(entryFolder, folderPathInArchive, StringComparison.OrdinalIgnoreCase);
-
-                                if (sameFolder)
-                                {
-                                    string targetFilePath = Path.Combine(extractPath, Path.GetFileName(e.Key));
-
-                                    using (var entryStream = e.OpenEntryStream())
-                                    using (var fileStream = File.Create(targetFilePath))
-                                    {
-                                        entryStream.CopyTo(fileStream);
-                                    }
-                                }
-                            }
-
-                            Console.WriteLine("Extracted folder: " + (isRootFile ? archiveName : folderPathInArchive));
-                            found = true;
-                            break; // stop after first matching folder
+                            entryStream.CopyTo(fileStream);
                         }
                     }
 
-                    if (found)
-                        break;
-                }
-
-                if (!found)
-                {
-                    Console.WriteLine("No target files found in archive.");
+                    string relativeFolder = GetRelativeToMods(fullExtractPath, modsRoot);
+                    extractedFolders.Add(new ExtractedFolder(relativeFolder, fullExtractPath));
                 }
             }
+
+            Console.WriteLine("Folders containing target files:");
+            foreach (var f in extractedFolders)
+            {
+                Console.WriteLine(f);
+            }
+
+            return extractedFolders;
         }
     }
 }

@@ -14,8 +14,7 @@ namespace SR2JP_Mod_Manager
         {
             return path
                 .Replace('\\', '/')
-                .Trim()
-                .ToLower();
+                .Trim();
         }
     }
 }
