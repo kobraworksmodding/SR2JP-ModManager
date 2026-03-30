@@ -297,7 +297,7 @@ namespace SR2JP_Mod_Manager
             }
             else
             {
-                if (!Directory.Exists(Path.Combine(Global.SR2Location, "mods"))) ;
+                if (!Directory.Exists(Path.Combine(Global.SR2Location, "mods")))
                 {
                     Directory.CreateDirectory(Path.Combine(Global.SR2Location, "mods"));
                 }
@@ -344,6 +344,45 @@ namespace SR2JP_Mod_Manager
         {
             Duplicates form2 = new Duplicates();
             form2.ShowDialog(); // Opens Form2 as a modal dialog (blocks Form1 until closed)
+        }
+
+        private void scanForModsNotInLoadOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Get existing items in ListView
+            int numFolders = 0;
+            string modsPath = Path.Combine(Global.SR2Location, "mods");
+
+            HashSet<string> existingItems = new HashSet<string>();
+
+            // Normalize existing ListView items
+            foreach (ListViewItem item in listView1.Items)
+            {
+                existingItems.Add(Global.NormalizePathFmt(item.Text));
+            }
+
+            // Scan directories
+            foreach (string folder in Directory.GetDirectories(modsPath))
+            {
+                string folderName = Path.GetFileName(folder);
+                string displayPath = $"mods/{folderName}";
+
+                string normalizedPath = Global.NormalizePathFmt(displayPath);
+
+                if (!existingItems.Contains(normalizedPath))
+                {
+                    numFolders++;
+                    listView1.Items.Add(displayPath);
+                    existingItems.Add(normalizedPath);
+                }
+            }
+            if (numFolders < 1)
+            {
+                MessageBox.Show("No missing mods from your \"mods\" folder! No need to panic.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                MessageBox.Show("Found " + numFolders + " missing mods.\n\n They've now been added to your load order.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
         }
     }
 }

@@ -36,9 +36,14 @@ namespace  SR2JP_Mod_Manager {
                 {
                     Global.numOfDupes++;
                     anyDuplicates = true;
-                    sb.AppendLine("Duplicate file: " + kvp.Key);
-                    sb.AppendLine(string.Join(" - ", kvp.Value));
-                    sb.AppendLine();
+                    if (!(kvp.Key == "desktop.ini"))
+                    {
+                        sb.AppendLine("↓ " + kvp.Key + " ↓");
+                        sb.AppendLine("----------");
+                        sb.AppendLine(string.Join("\n", kvp.Value));
+                        sb.AppendLine("----------");
+                        sb.AppendLine();
+                    }
                 }
             }
 

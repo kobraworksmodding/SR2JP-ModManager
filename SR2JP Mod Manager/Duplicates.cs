@@ -15,6 +15,7 @@ namespace SR2JP_Mod_Manager
         public Duplicates()
         {
             InitializeComponent();
+
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -29,6 +30,10 @@ namespace SR2JP_Mod_Manager
             richTextBox1.Text = duplicatesText;
             this.Text = "Conflict Checker: Conflicts: " + Global.numOfDupes;
             Global.numOfDupes = 0;
+
+            richTextBox1.SelectAll();
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Center;
+            richTextBox1.DeselectAll(); 
         }
     }
 }

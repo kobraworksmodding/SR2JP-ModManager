@@ -2,6 +2,6 @@
 {
     public static class GitInfo
     {
-        public const string Hash = "b20b42f";
+        public const string Hash = "1b19f34";
     }
 }

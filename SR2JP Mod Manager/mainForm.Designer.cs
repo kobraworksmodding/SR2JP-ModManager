@@ -40,15 +40,16 @@
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.FindMod = new System.Windows.Forms.OpenFileDialog();
-            this.ExtractingBox = new System.Windows.Forms.Panel();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.FindMod = new System.Windows.Forms.OpenFileDialog();
+            this.ExtractingBox = new System.Windows.Forms.Panel();
+            this.scanForModsNotInLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -108,7 +109,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.conflictCheckerToolStripMenuItem});
+            this.conflictCheckerToolStripMenuItem,
+            this.scanForModsNotInLoadOrderToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -116,7 +118,7 @@
             // conflictCheckerToolStripMenuItem
             // 
             this.conflictCheckerToolStripMenuItem.Name = "conflictCheckerToolStripMenuItem";
-            this.conflictCheckerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.conflictCheckerToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.conflictCheckerToolStripMenuItem.Text = "Conflict Checker";
             this.conflictCheckerToolStripMenuItem.Click += new System.EventHandler(this.conflictCheckerToolStripMenuItem_Click);
             // 
@@ -138,6 +140,7 @@
             // toolStrip1
             // 
             this.toolStrip1.AutoSize = false;
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.toolStripButton2,
@@ -151,44 +154,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(800, 28);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // listView1
-            // 
-            this.listView1.AllowColumnReorder = true;
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 55);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(800, 380);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
-            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
-            // FindMod
-            // 
-            this.FindMod.Filter = "Popular Archives|*.zip;*.7z;*.rar|Zip Archive|*.zip|7-ZIP Archive|*.7z|RAR Archiv" +
-    "e|*.rar";
-            this.FindMod.Tag = "";
-            // 
-            // ExtractingBox
-            // 
-            this.ExtractingBox.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ExtractingBox.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.Extracting;
-            this.ExtractingBox.Location = new System.Drawing.Point(445, 168);
-            this.ExtractingBox.Name = "ExtractingBox";
-            this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
-            this.ExtractingBox.TabIndex = 4;
             // 
             // toolStripButton1
             // 
@@ -251,6 +216,52 @@
             this.toolStripButton6.Text = "Lower Mod In Order";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
+            // listView1
+            // 
+            this.listView1.AllowColumnReorder = true;
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.BackColor = System.Drawing.Color.White;
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listView1.FullRowSelect = true;
+            this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(0, 55);
+            this.listView1.MultiSelect = false;
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(800, 380);
+            this.listView1.TabIndex = 3;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
+            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
+            // FindMod
+            // 
+            this.FindMod.Filter = "Popular Archives|*.zip;*.7z;*.rar|Zip Archive|*.zip|7-ZIP Archive|*.7z|RAR Archiv" +
+    "e|*.rar";
+            this.FindMod.Tag = "";
+            // 
+            // ExtractingBox
+            // 
+            this.ExtractingBox.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.ExtractingBox.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.Extracting;
+            this.ExtractingBox.Location = new System.Drawing.Point(445, 168);
+            this.ExtractingBox.Name = "ExtractingBox";
+            this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
+            this.ExtractingBox.TabIndex = 4;
+            // 
+            // scanForModsNotInLoadOrderToolStripMenuItem
+            // 
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Name = "scanForModsNotInLoadOrderToolStripMenuItem";
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Text = "Scan for mods not in load order";
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.scanForModsNotInLoadOrderToolStripMenuItem_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -298,6 +309,7 @@
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.OpenFileDialog FindMod;
         private System.Windows.Forms.Panel ExtractingBox;
+        private System.Windows.Forms.ToolStripMenuItem scanForModsNotInLoadOrderToolStripMenuItem;
     }
 }
 
