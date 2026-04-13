@@ -277,7 +277,7 @@ namespace SR2JP_Mod_Manager
 
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Created by Uzis as part of a Kobraworks Project.\n\n- 2026 -", "SR2JP Mod Manager");
+            MessageBox.Show("Created by Soaa as part of a Kobraworks Project.\n\n- 2026 -", "SR2JP Mod Manager");
         }
 
         private void toolStripButton5_Click(object sender, EventArgs e)
