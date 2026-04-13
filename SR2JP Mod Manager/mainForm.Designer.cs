@@ -37,6 +37,7 @@
             this.saveLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.conflictCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanForModsNotInLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -49,7 +50,8 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.FindMod = new System.Windows.Forms.OpenFileDialog();
             this.ExtractingBox = new System.Windows.Forms.Panel();
-            this.scanForModsNotInLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.swapBackToPreviousGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -86,7 +88,9 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importModToolStripMenuItem,
-            this.saveLoadOrderToolStripMenuItem});
+            this.saveLoadOrderToolStripMenuItem,
+            this.changeGameFolderToolStripMenuItem,
+            this.swapBackToPreviousGameFolderToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -95,14 +99,14 @@
             // importModToolStripMenuItem
             // 
             this.importModToolStripMenuItem.Name = "importModToolStripMenuItem";
-            this.importModToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.importModToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
             this.importModToolStripMenuItem.Text = "Import Mod";
             this.importModToolStripMenuItem.Click += new System.EventHandler(this.importModToolStripMenuItem_Click);
             // 
             // saveLoadOrderToolStripMenuItem
             // 
             this.saveLoadOrderToolStripMenuItem.Name = "saveLoadOrderToolStripMenuItem";
-            this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
             this.saveLoadOrderToolStripMenuItem.Text = "Save Load Order";
             this.saveLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.saveLoadOrderToolStripMenuItem_Click);
             // 
@@ -122,6 +126,13 @@
             this.conflictCheckerToolStripMenuItem.Text = "Conflict Checker";
             this.conflictCheckerToolStripMenuItem.Click += new System.EventHandler(this.conflictCheckerToolStripMenuItem_Click);
             // 
+            // scanForModsNotInLoadOrderToolStripMenuItem
+            // 
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Name = "scanForModsNotInLoadOrderToolStripMenuItem";
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Text = "Scan for mods not in load order";
+            this.scanForModsNotInLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.scanForModsNotInLoadOrderToolStripMenuItem_Click);
+            // 
             // infoToolStripMenuItem
             // 
             this.infoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -133,7 +144,7 @@
             // creditsToolStripMenuItem
             // 
             this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.creditsToolStripMenuItem.Text = "Credits";
             this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
@@ -261,12 +272,20 @@
             this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
             this.ExtractingBox.TabIndex = 4;
             // 
-            // scanForModsNotInLoadOrderToolStripMenuItem
+            // changeGameFolderToolStripMenuItem
             // 
-            this.scanForModsNotInLoadOrderToolStripMenuItem.Name = "scanForModsNotInLoadOrderToolStripMenuItem";
-            this.scanForModsNotInLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.scanForModsNotInLoadOrderToolStripMenuItem.Text = "Scan for mods not in load order";
-            this.scanForModsNotInLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.scanForModsNotInLoadOrderToolStripMenuItem_Click);
+            this.changeGameFolderToolStripMenuItem.Name = "changeGameFolderToolStripMenuItem";
+            this.changeGameFolderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.changeGameFolderToolStripMenuItem.Text = "Change Game Folder";
+            this.changeGameFolderToolStripMenuItem.Click += new System.EventHandler(this.changeGameFolderToolStripMenuItem_Click_1);
+            // 
+            // swapBackToPreviousGameFolderToolStripMenuItem
+            // 
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Name = "swapBackToPreviousGameFolderToolStripMenuItem";
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Text = "Swap back to previous Game Folder";
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Visible = false;
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Click += new System.EventHandler(this.swapBackToPreviousGameFolderToolStripMenuItem_Click);
             // 
             // mainForm
             // 
@@ -316,6 +335,8 @@
         private System.Windows.Forms.OpenFileDialog FindMod;
         private System.Windows.Forms.Panel ExtractingBox;
         private System.Windows.Forms.ToolStripMenuItem scanForModsNotInLoadOrderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeGameFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem swapBackToPreviousGameFolderToolStripMenuItem;
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿// - [ mainForm.cs ] -
 // Created by Uzis: 3/29/2026
 
+using SharpCompress.Common;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,6 +17,8 @@ namespace SR2JP_Mod_Manager
     public partial class mainForm : Form
     {
         bool bHasReadFirstMessage = false; // Just a hack if necessary to make it so the message doesn't pop twice at once.
+        string prevGameLocation = "";
+        string gameLocation = "";
         private static Mutex mutex = null;
 
 
@@ -73,7 +76,7 @@ namespace SR2JP_Mod_Manager
             GameLocation.Text = $"SR2 Location: {Global.SR2Location}";
         }
 
-        public void LookForSR2() // Look for saints row 2 directory.
+        public void LookForSR2(int calledFrom) // Look for saints row 2 directory. int - 0 = called in func 1 = called in startup 2 = called in change game
         {
             if (findSR2dialog.ShowDialog() == DialogResult.OK)
             {
@@ -81,17 +84,28 @@ namespace SR2JP_Mod_Manager
                 //MessageBox.Show(filePath);
                 if (File.Exists($"{filePath}\\sr2_pc.exe"))
                 {
+                    if (calledFrom == 2)
+                    {
+                        prevGameLocation = Global.SR2Location;
+                    }
                     if (!Directory.Exists(Global.appDataPath)) // Check if our settings path exists, if not, create it.
                     {
                         Directory.CreateDirectory(Global.appDataPath);
                     }
                     File.WriteAllText($"{Global.appDataPath}\\settings.txt", filePath); // Create a simple settings.txt with our SR2 directory path that we can also edit later.
                     Global.SR2Location = filePath;
+
+                    gameLocation = Global.SR2Location;  
+                    if (calledFrom == 2)
+                    {
+                        File.WriteAllText($"{Global.appDataPath}\\recent.txt", prevGameLocation);
+                    }
+ 
                 }
                 else
                 {
                     MessageBox.Show("This location selected does not have the\nSaints Row 2 executable binary in it (sr2_pc.exe)\n\nPlease select the right installation location.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LookForSR2();
+                    LookForSR2(0);
                 }
             }
             else
@@ -120,6 +134,11 @@ namespace SR2JP_Mod_Manager
             GameLocation.Hide();
             ExtractingBox.Hide();
             listView1.AllowDrop = true;
+            if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\recent.txt"))
+            {
+                swapBackToPreviousGameFolderToolStripMenuItem.Visible = true;
+            }
+
             if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\settings.txt"))
             {
                 Global.SR2Location = File.ReadAllText($"{Global.appDataPath}\\settings.txt");
@@ -141,7 +160,7 @@ namespace SR2JP_Mod_Manager
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information)) == DialogResult.OK) ;
                         {
-                            LookForSR2();
+                            LookForSR2(1);
                         }
 
                         PerformStartupThings();
@@ -476,6 +495,20 @@ namespace SR2JP_Mod_Manager
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Control && e.KeyCode == Keys.S) // Save shortcut
+            {
+                try
+                {
+                    SaveLoadOrder();
+                    return;
+                }
+                catch
+                {
+                    MessageBox.Show("Quick save failed.", "SR2JP Mod Manager");
+                    return;
+                }
+            }
+
             if (e.KeyCode == Keys.W)
             {
                 if (listView1.SelectedItems.Count == 0) return;
@@ -528,6 +561,31 @@ namespace SR2JP_Mod_Manager
                     TitleEditsMade();
                 }
             }
+            
+        }
+
+        private void addGameFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+   
+        }
+
+        private void changeGameFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void changeGameFolderToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            LookForSR2(2);
+            Application.Restart();
+        }
+
+        private void swapBackToPreviousGameFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string oldtonewpath = File.ReadAllText($"{Global.appDataPath}\\recent.txt");
+            File.WriteAllText($"{Global.appDataPath}\\settings.txt", oldtonewpath);
+            File.WriteAllText($"{Global.appDataPath}\\recent.txt", Global.SR2Location);
+            Application.Restart();
         }
     }
 }
