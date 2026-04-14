@@ -1,11 +1,12 @@
 ﻿// - [ mainForm.cs ] -
 // Created by Uzis: 3/29/2026
 
-using SharpCompress.Common;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -113,6 +114,177 @@ namespace SR2JP_Mod_Manager
                 Application.Exit();
             }
         }
+        void ScanSR2Install()
+        {
+            // Try Steam
+            string steamPath = GetSteamPath();
+            string steamGame = null;
+
+            if (!string.IsNullOrEmpty(steamPath))
+            {
+                steamGame = FindSteamGame(steamPath, 9480);
+            }
+
+            // Try GOG
+            string gogGame = FindGogGame(new[] { "1231827815" });
+
+            if (!string.IsNullOrEmpty(steamGame))
+            {
+                Console.WriteLine("Found via Steam: " + steamGame);
+                MessageBox.Show("Mod Manager has found Saints Row 2 installed at:\n" + steamGame + "\n\nIf you would like to change this you can do so in the File menu.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!Directory.Exists(Global.appDataPath))
+                {
+                    Directory.CreateDirectory(Global.appDataPath);
+                }
+                File.WriteAllText($"{Global.appDataPath}\\settings.txt", steamGame);
+
+            }
+            else if (!string.IsNullOrEmpty(gogGame))
+            {
+                Console.WriteLine("Found via GOG: " + gogGame);
+                if (!Directory.Exists(Global.appDataPath))
+                {
+                    Directory.CreateDirectory(Global.appDataPath);
+                }
+                File.WriteAllText($"{Global.appDataPath}\\settings.txt", gogGame);
+            }
+            else
+            {
+                Console.WriteLine("Game not found on Steam or GOG.");
+            }
+        }
+
+        // ---------------- STEAM ----------------
+
+        static string GetSteamPath()
+        {
+            foreach (RegistryView view in new[] { RegistryView.Registry64, RegistryView.Registry32 })
+            {
+                try
+                {
+                    using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, view))
+                    using (RegistryKey key = baseKey.OpenSubKey(@"SOFTWARE\Valve\Steam"))
+                    {
+                        if (key != null)
+                        {
+                            object value = key.GetValue("InstallPath");
+                            if (value != null)
+                                return value.ToString();
+                        }
+                    }
+                }
+                catch { }
+            }
+            return null;
+        }
+
+        static List<string> GetLibraryFolders(string steamPath)
+        {
+            List<string> libraries = new List<string>();
+            libraries.Add(steamPath);
+
+            string vdfPath = Path.Combine(steamPath, "steamapps", "libraryfolders.vdf");
+
+            if (!File.Exists(vdfPath))
+                return libraries;
+
+            string content = File.ReadAllText(vdfPath);
+
+            MatchCollection matches = Regex.Matches(content, "\"path\"\\s*\"([^\"]+)\"");
+
+            foreach (Match match in matches)
+            {
+                string path = match.Groups[1].Value.Replace(@"\\", @"\");
+
+                if (!libraries.Contains(path))
+                    libraries.Add(path);
+            }
+
+            return libraries;
+        }
+
+        static string FindSteamGame(string steamPath, int appId)
+        {
+            List<string> libraries = GetLibraryFolders(steamPath);
+
+            foreach (string lib in libraries)
+            {
+                string manifestPath = Path.Combine(lib, "steamapps", "appmanifest_" + appId + ".acf");
+
+                if (!File.Exists(manifestPath))
+                    continue;
+
+                string content = File.ReadAllText(manifestPath);
+
+                Match match = Regex.Match(content, "\"installdir\"\\s*\"([^\"]+)\"");
+                if (!match.Success)
+                    continue;
+
+                string dirName = match.Groups[1].Value;
+
+                string fullPath = Path.Combine(lib, "steamapps", "common", dirName);
+
+                if (Directory.Exists(fullPath))
+                    return fullPath;
+            }
+
+            return null;
+        }
+
+        // ---------------- GOG ----------------
+
+        static string FindGogGame(string[] possibleIds)
+        {
+            foreach (RegistryView view in new[] { RegistryView.Registry32, RegistryView.Registry64 })
+            {
+                try
+                {
+                    using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, view))
+                    using (RegistryKey gamesKey = baseKey.OpenSubKey(@"SOFTWARE\GOG.com\Games"))
+                    {
+                        if (gamesKey == null)
+                            continue;
+
+                        foreach (string subKeyName in gamesKey.GetSubKeyNames())
+                        {
+                            if (possibleIds != null && possibleIds.Length > 0)
+                            {
+                                bool matchId = false;
+                                foreach (string id in possibleIds)
+                                {
+                                    if (subKeyName == id)
+                                    {
+                                        matchId = true;
+                                        break;
+                                    }
+                                }
+                                if (!matchId)
+                                    continue;
+                            }
+
+                            using (RegistryKey gameKey = gamesKey.OpenSubKey(subKeyName))
+                            {
+                                if (gameKey == null)
+                                    continue;
+
+                                object pathValue = gameKey.GetValue("path");
+
+                                if (pathValue != null)
+                                {
+                                    string path = pathValue.ToString();
+                                    if (Directory.Exists(path))
+                                        return path;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            return null;
+        }
+
         [STAThread]
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -128,6 +300,10 @@ namespace SR2JP_Mod_Manager
                 return;
             }
 
+            if (!Directory.Exists(Global.appDataPath) || !File.Exists($"{Global.appDataPath}\\settings.txt"))
+            {
+                ScanSR2Install(); // Scan for Steam and/or GOG installs
+            }
             // Initialize the Form Name w/ Previous Git Hash.
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
             // Initialise settings and such for the mod manager.
