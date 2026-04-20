@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -767,8 +768,18 @@ namespace SR2JP_Mod_Manager
 
         private void runSaintsRow2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (File.Exists($"{Global.SR2Location}\\sr2_pc.exe"))
-                Process.Start($"{Global.SR2Location}\\sr2_pc.exe");
+            string exePath = Path.Combine(Global.SR2Location, "sr2_pc.exe");
+
+            if (!File.Exists(exePath))
+                return;
+
+            if (Process.GetProcessesByName("sr2_pc").Any())
+            {
+                MessageBox.Show("Saints Row 2 is already running.", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            Process.Start(exePath);
         }
     }
 }
