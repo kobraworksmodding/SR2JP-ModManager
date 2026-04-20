@@ -4,6 +4,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -762,6 +763,12 @@ namespace SR2JP_Mod_Manager
             File.WriteAllText($"{Global.appDataPath}\\settings.txt", oldtonewpath);
             File.WriteAllText($"{Global.appDataPath}\\recent.txt", Global.SR2Location);
             Application.Restart();
+        }
+
+        private void runSaintsRow2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists($"{Global.SR2Location}\\sr2_pc.exe"))
+                Process.Start($"{Global.SR2Location}\\sr2_pc.exe");
         }
     }
 }

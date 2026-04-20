@@ -35,6 +35,8 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.swapBackToPreviousGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.conflictCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanForModsNotInLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,8 +52,7 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.FindMod = new System.Windows.Forms.OpenFileDialog();
             this.ExtractingBox = new System.Windows.Forms.Panel();
-            this.changeGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.swapBackToPreviousGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSaintsRow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -90,7 +91,8 @@
             this.importModToolStripMenuItem,
             this.saveLoadOrderToolStripMenuItem,
             this.changeGameFolderToolStripMenuItem,
-            this.swapBackToPreviousGameFolderToolStripMenuItem});
+            this.swapBackToPreviousGameFolderToolStripMenuItem,
+            this.runSaintsRow2ToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -109,6 +111,21 @@
             this.saveLoadOrderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
             this.saveLoadOrderToolStripMenuItem.Text = "Save Load Order";
             this.saveLoadOrderToolStripMenuItem.Click += new System.EventHandler(this.saveLoadOrderToolStripMenuItem_Click);
+            // 
+            // changeGameFolderToolStripMenuItem
+            // 
+            this.changeGameFolderToolStripMenuItem.Name = "changeGameFolderToolStripMenuItem";
+            this.changeGameFolderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.changeGameFolderToolStripMenuItem.Text = "Change Game Folder";
+            this.changeGameFolderToolStripMenuItem.Click += new System.EventHandler(this.changeGameFolderToolStripMenuItem_Click_1);
+            // 
+            // swapBackToPreviousGameFolderToolStripMenuItem
+            // 
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Name = "swapBackToPreviousGameFolderToolStripMenuItem";
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Text = "Swap back to previous Game Folder";
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Visible = false;
+            this.swapBackToPreviousGameFolderToolStripMenuItem.Click += new System.EventHandler(this.swapBackToPreviousGameFolderToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -272,20 +289,12 @@
             this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
             this.ExtractingBox.TabIndex = 4;
             // 
-            // changeGameFolderToolStripMenuItem
+            // runSaintsRow2ToolStripMenuItem
             // 
-            this.changeGameFolderToolStripMenuItem.Name = "changeGameFolderToolStripMenuItem";
-            this.changeGameFolderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
-            this.changeGameFolderToolStripMenuItem.Text = "Change Game Folder";
-            this.changeGameFolderToolStripMenuItem.Click += new System.EventHandler(this.changeGameFolderToolStripMenuItem_Click_1);
-            // 
-            // swapBackToPreviousGameFolderToolStripMenuItem
-            // 
-            this.swapBackToPreviousGameFolderToolStripMenuItem.Name = "swapBackToPreviousGameFolderToolStripMenuItem";
-            this.swapBackToPreviousGameFolderToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
-            this.swapBackToPreviousGameFolderToolStripMenuItem.Text = "Swap back to previous Game Folder";
-            this.swapBackToPreviousGameFolderToolStripMenuItem.Visible = false;
-            this.swapBackToPreviousGameFolderToolStripMenuItem.Click += new System.EventHandler(this.swapBackToPreviousGameFolderToolStripMenuItem_Click);
+            this.runSaintsRow2ToolStripMenuItem.Name = "runSaintsRow2ToolStripMenuItem";
+            this.runSaintsRow2ToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.runSaintsRow2ToolStripMenuItem.Text = "Run Saints Row 2";
+            this.runSaintsRow2ToolStripMenuItem.Click += new System.EventHandler(this.runSaintsRow2ToolStripMenuItem_Click);
             // 
             // mainForm
             // 
@@ -337,6 +346,7 @@
         private System.Windows.Forms.ToolStripMenuItem scanForModsNotInLoadOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeGameFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem swapBackToPreviousGameFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runSaintsRow2ToolStripMenuItem;
     }
 }
 
