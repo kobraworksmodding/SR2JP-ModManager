@@ -779,7 +779,11 @@ namespace SR2JP_Mod_Manager
                 return;
             }
 
-            Process.Start(exePath);
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = exePath;
+            psi.WorkingDirectory = Path.GetDirectoryName(exePath);
+
+            Process.Start(psi);
         }
     }
 }
