@@ -358,16 +358,29 @@ namespace SR2JP_Mod_Manager
 
                 foreach (var f in folders)
                 {
-                    string folderText = f.ToString();
+                    string folderText = f.ToString().Replace('\\', '/');
 
                     var newItem = listView1.Items.Insert(0, folderText);
 
-                    newItem.Checked = true;
+                    if (IsTopLevelMod(folderText))
+                        newItem.Checked = true;
                 }
 
                 ExtractingBox.Hide();
                 SaveLoadOrder();
             }
+        }
+
+        private bool IsTopLevelMod(string path)
+        {
+            path = path.Replace('\\', '/').Trim('/');
+
+            if (!path.StartsWith("mods/", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var parts = path.Split('/');
+
+            return parts.Length == 2;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
