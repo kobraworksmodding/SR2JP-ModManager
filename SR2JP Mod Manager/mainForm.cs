@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 
 
@@ -127,9 +128,6 @@ namespace SR2JP_Mod_Manager
                 steamGame = FindSteamGame(steamPath, 9480);
             }
 
-            // Try GOG
-            string gogGame = FindGogGame(new[] { "1231827815" });
-
             if (!string.IsNullOrEmpty(steamGame))
             {
                 Console.WriteLine("Found via Steam: " + steamGame);
@@ -141,18 +139,9 @@ namespace SR2JP_Mod_Manager
                 File.WriteAllText($"{Global.appDataPath}\\settings.txt", steamGame);
 
             }
-            else if (!string.IsNullOrEmpty(gogGame))
-            {
-                Console.WriteLine("Found via GOG: " + gogGame);
-                if (!Directory.Exists(Global.appDataPath))
-                {
-                    Directory.CreateDirectory(Global.appDataPath);
-                }
-                File.WriteAllText($"{Global.appDataPath}\\settings.txt", gogGame);
-            }
             else
             {
-                Console.WriteLine("Game not found on Steam or GOG.");
+                Console.WriteLine("Game not found on Steam");
             }
         }
 
@@ -233,59 +222,6 @@ namespace SR2JP_Mod_Manager
             return null;
         }
 
-        // ---------------- GOG ----------------
-
-        static string FindGogGame(string[] possibleIds)
-        {
-            foreach (RegistryView view in new[] { RegistryView.Registry32, RegistryView.Registry64 })
-            {
-                try
-                {
-                    using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, view))
-                    using (RegistryKey gamesKey = baseKey.OpenSubKey(@"SOFTWARE\GOG.com\Games"))
-                    {
-                        if (gamesKey == null)
-                            continue;
-
-                        foreach (string subKeyName in gamesKey.GetSubKeyNames())
-                        {
-                            if (possibleIds != null && possibleIds.Length > 0)
-                            {
-                                bool matchId = false;
-                                foreach (string id in possibleIds)
-                                {
-                                    if (subKeyName == id)
-                                    {
-                                        matchId = true;
-                                        break;
-                                    }
-                                }
-                                if (!matchId)
-                                    continue;
-                            }
-
-                            using (RegistryKey gameKey = gamesKey.OpenSubKey(subKeyName))
-                            {
-                                if (gameKey == null)
-                                    continue;
-
-                                object pathValue = gameKey.GetValue("path");
-
-                                if (pathValue != null)
-                                {
-                                    string path = pathValue.ToString();
-                                    if (Directory.Exists(path))
-                                        return path;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch { }
-            }
-
-            return null;
-        }
 
         [STAThread]
         private void Form1_Load(object sender, EventArgs e)
@@ -311,6 +247,7 @@ namespace SR2JP_Mod_Manager
             // Initialise settings and such for the mod manager.
             GameLocation.Hide();
             ExtractingBox.Hide();
+            modInfoPanel.Hide();
             listView1.AllowDrop = true;
             if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\recent.txt"))
             {
@@ -518,7 +455,7 @@ namespace SR2JP_Mod_Manager
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            modInfoPanel.Show();
         }
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -797,6 +734,11 @@ namespace SR2JP_Mod_Manager
             psi.WorkingDirectory = Path.GetDirectoryName(exePath);
 
             Process.Start(psi);
+        }
+
+        private void modInfoPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

@@ -37,24 +37,33 @@
             this.saveLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.swapBackToPreviousGameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSaintsRow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.conflictCheckerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanForModsNotInLoadOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.FindMod = new System.Windows.Forms.OpenFileDialog();
+            this.modInfoPanel = new System.Windows.Forms.Panel();
+            this.modPicture = new System.Windows.Forms.PictureBox();
+            this.ExtractingBox = new System.Windows.Forms.Panel();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.FindMod = new System.Windows.Forms.OpenFileDialog();
-            this.ExtractingBox = new System.Windows.Forms.Panel();
-            this.runSaintsRow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modName = new System.Windows.Forms.Label();
+            this.modDesc = new System.Windows.Forms.Label();
+            this.modVer = new System.Windows.Forms.Label();
+            this.btmPanel = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.modInfoPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.modPicture)).BeginInit();
+            this.btmPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // findSR2dialog
@@ -66,10 +75,10 @@
             // 
             this.GameLocation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.GameLocation.AutoSize = true;
-            this.GameLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GameLocation.Location = new System.Drawing.Point(12, 437);
+            this.GameLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GameLocation.Location = new System.Drawing.Point(3, 0);
             this.GameLocation.Name = "GameLocation";
-            this.GameLocation.Size = new System.Drawing.Size(96, 12);
+            this.GameLocation.Size = new System.Drawing.Size(142, 15);
             this.GameLocation.TabIndex = 0;
             this.GameLocation.Text = "SR2 IS NOT LOADED";
             // 
@@ -127,6 +136,13 @@
             this.swapBackToPreviousGameFolderToolStripMenuItem.Visible = false;
             this.swapBackToPreviousGameFolderToolStripMenuItem.Click += new System.EventHandler(this.swapBackToPreviousGameFolderToolStripMenuItem_Click);
             // 
+            // runSaintsRow2ToolStripMenuItem
+            // 
+            this.runSaintsRow2ToolStripMenuItem.Name = "runSaintsRow2ToolStripMenuItem";
+            this.runSaintsRow2ToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+            this.runSaintsRow2ToolStripMenuItem.Text = "Run Saints Row 2";
+            this.runSaintsRow2ToolStripMenuItem.Click += new System.EventHandler(this.runSaintsRow2ToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -161,7 +177,7 @@
             // creditsToolStripMenuItem
             // 
             this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.creditsToolStripMenuItem.Text = "Credits";
             this.creditsToolStripMenuItem.Click += new System.EventHandler(this.creditsToolStripMenuItem_Click);
             // 
@@ -182,6 +198,72 @@
             this.toolStrip1.Size = new System.Drawing.Size(800, 28);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // listView1
+            // 
+            this.listView1.AllowColumnReorder = true;
+            this.listView1.BackColor = System.Drawing.Color.White;
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.listView1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listView1.FullRowSelect = true;
+            this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(0, 52);
+            this.listView1.MultiSelect = false;
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(800, 294);
+            this.listView1.TabIndex = 3;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
+            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
+            this.listView1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.listView1_ItemDrag);
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
+            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
+            this.listView1.DragOver += new System.Windows.Forms.DragEventHandler(this.listView1_DragOver);
+            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
+            this.listView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
+            // 
+            // FindMod
+            // 
+            this.FindMod.Filter = "Popular Archives|*.zip;*.7z;*.rar|Zip Archive|*.zip|7-ZIP Archive|*.7z|RAR Archiv" +
+    "e|*.rar";
+            this.FindMod.Tag = "";
+            // 
+            // modInfoPanel
+            // 
+            this.modInfoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.modInfoPanel.Controls.Add(this.modVer);
+            this.modInfoPanel.Controls.Add(this.modDesc);
+            this.modInfoPanel.Controls.Add(this.modName);
+            this.modInfoPanel.Controls.Add(this.modPicture);
+            this.modInfoPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.modInfoPanel.Location = new System.Drawing.Point(0, 349);
+            this.modInfoPanel.Name = "modInfoPanel";
+            this.modInfoPanel.Size = new System.Drawing.Size(800, 86);
+            this.modInfoPanel.TabIndex = 5;
+            this.modInfoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.modInfoPanel_Paint);
+            // 
+            // modPicture
+            // 
+            this.modPicture.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.PreviewIMG;
+            this.modPicture.Location = new System.Drawing.Point(3, 3);
+            this.modPicture.Name = "modPicture";
+            this.modPicture.Size = new System.Drawing.Size(137, 67);
+            this.modPicture.TabIndex = 0;
+            this.modPicture.TabStop = false;
+            // 
+            // ExtractingBox
+            // 
+            this.ExtractingBox.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.ExtractingBox.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.Extracting;
+            this.ExtractingBox.Location = new System.Drawing.Point(445, 168);
+            this.ExtractingBox.Name = "ExtractingBox";
+            this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
+            this.ExtractingBox.TabIndex = 4;
             // 
             // toolStripButton1
             // 
@@ -244,68 +326,55 @@
             this.toolStripButton6.Text = "Lower Mod In Order";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
-            // listView1
+            // modName
             // 
-            this.listView1.AllowColumnReorder = true;
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BackColor = System.Drawing.Color.White;
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 55);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(800, 380);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
-            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
-            this.listView1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.listView1_ItemDrag);
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
-            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
-            this.listView1.DragOver += new System.Windows.Forms.DragEventHandler(this.listView1_DragOver);
-            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
-            this.listView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
+            this.modName.AutoSize = true;
+            this.modName.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.modName.Location = new System.Drawing.Point(146, 3);
+            this.modName.Name = "modName";
+            this.modName.Size = new System.Drawing.Size(56, 13);
+            this.modName.TabIndex = 1;
+            this.modName.Text = "mod name";
             // 
-            // FindMod
+            // modDesc
             // 
-            this.FindMod.Filter = "Popular Archives|*.zip;*.7z;*.rar|Zip Archive|*.zip|7-ZIP Archive|*.7z|RAR Archiv" +
-    "e|*.rar";
-            this.FindMod.Tag = "";
+            this.modDesc.AutoSize = true;
+            this.modDesc.Location = new System.Drawing.Point(146, 16);
+            this.modDesc.Name = "modDesc";
+            this.modDesc.Size = new System.Drawing.Size(211, 13);
+            this.modDesc.TabIndex = 2;
+            this.modDesc.Text = "mod description, lorem ipsum blah blah blah";
             // 
-            // ExtractingBox
+            // modVer
             // 
-            this.ExtractingBox.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ExtractingBox.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.Extracting;
-            this.ExtractingBox.Location = new System.Drawing.Point(445, 168);
-            this.ExtractingBox.Name = "ExtractingBox";
-            this.ExtractingBox.Size = new System.Drawing.Size(355, 142);
-            this.ExtractingBox.TabIndex = 4;
+            this.modVer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.modVer.AutoSize = true;
+            this.modVer.Location = new System.Drawing.Point(712, 70);
+            this.modVer.Name = "modVer";
+            this.modVer.Size = new System.Drawing.Size(85, 13);
+            this.modVer.TabIndex = 3;
+            this.modVer.Text = "mod version: 1.0";
             // 
-            // runSaintsRow2ToolStripMenuItem
+            // btmPanel
             // 
-            this.runSaintsRow2ToolStripMenuItem.Name = "runSaintsRow2ToolStripMenuItem";
-            this.runSaintsRow2ToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
-            this.runSaintsRow2ToolStripMenuItem.Text = "Run Saints Row 2";
-            this.runSaintsRow2ToolStripMenuItem.Click += new System.EventHandler(this.runSaintsRow2ToolStripMenuItem_Click);
+            this.btmPanel.Controls.Add(this.GameLocation);
+            this.btmPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btmPanel.Location = new System.Drawing.Point(0, 435);
+            this.btmPanel.Name = "btmPanel";
+            this.btmPanel.Size = new System.Drawing.Size(800, 15);
+            this.btmPanel.TabIndex = 6;
             // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.modInfoPanel);
             this.Controls.Add(this.ExtractingBox);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.GameLocation);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.btmPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "mainForm";
@@ -316,6 +385,11 @@
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.modInfoPanel.ResumeLayout(false);
+            this.modInfoPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.modPicture)).EndInit();
+            this.btmPanel.ResumeLayout(false);
+            this.btmPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -347,6 +421,12 @@
         private System.Windows.Forms.ToolStripMenuItem changeGameFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem swapBackToPreviousGameFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSaintsRow2ToolStripMenuItem;
+        private System.Windows.Forms.Panel modInfoPanel;
+        private System.Windows.Forms.PictureBox modPicture;
+        private System.Windows.Forms.Label modVer;
+        private System.Windows.Forms.Label modDesc;
+        private System.Windows.Forms.Label modName;
+        private System.Windows.Forms.Panel btmPanel;
     }
 }
 
