@@ -47,7 +47,10 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.FindMod = new System.Windows.Forms.OpenFileDialog();
             this.modInfoPanel = new System.Windows.Forms.Panel();
-            this.modPicture = new System.Windows.Forms.PictureBox();
+            this.modDesc = new System.Windows.Forms.Label();
+            this.modName = new System.Windows.Forms.Label();
+            this.btmPanel = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ExtractingBox = new System.Windows.Forms.Panel();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -55,15 +58,18 @@
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.modName = new System.Windows.Forms.Label();
-            this.modDesc = new System.Windows.Forms.Label();
-            this.modVer = new System.Windows.Forms.Label();
-            this.btmPanel = new System.Windows.Forms.Panel();
+            this.mergeModsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeClothingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeVehiclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeWeaponsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.conflictCheckerModTablesOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.modInfoPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.modPicture)).BeginInit();
             this.btmPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // findSR2dialog
@@ -147,6 +153,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.conflictCheckerToolStripMenuItem,
+            this.conflictCheckerModTablesOnlyToolStripMenuItem,
+            this.mergeModsToolStripMenuItem,
             this.scanForModsNotInLoadOrderToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
@@ -202,10 +210,11 @@
             // listView1
             // 
             this.listView1.AllowColumnReorder = true;
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.BackColor = System.Drawing.Color.White;
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.CheckBoxes = true;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Top;
             this.listView1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
@@ -235,26 +244,59 @@
             // 
             // modInfoPanel
             // 
+            this.modInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.modInfoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.modInfoPanel.Controls.Add(this.modVer);
+            this.modInfoPanel.Controls.Add(this.pictureBox1);
             this.modInfoPanel.Controls.Add(this.modDesc);
             this.modInfoPanel.Controls.Add(this.modName);
-            this.modInfoPanel.Controls.Add(this.modPicture);
-            this.modInfoPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.modInfoPanel.Location = new System.Drawing.Point(0, 349);
             this.modInfoPanel.Name = "modInfoPanel";
             this.modInfoPanel.Size = new System.Drawing.Size(800, 86);
             this.modInfoPanel.TabIndex = 5;
             this.modInfoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.modInfoPanel_Paint);
             // 
-            // modPicture
+            // modDesc
             // 
-            this.modPicture.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.PreviewIMG;
-            this.modPicture.Location = new System.Drawing.Point(3, 3);
-            this.modPicture.Name = "modPicture";
-            this.modPicture.Size = new System.Drawing.Size(137, 67);
-            this.modPicture.TabIndex = 0;
-            this.modPicture.TabStop = false;
+            this.modDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modDesc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.modDesc.Location = new System.Drawing.Point(3, 18);
+            this.modDesc.Name = "modDesc";
+            this.modDesc.Size = new System.Drawing.Size(671, 64);
+            this.modDesc.TabIndex = 2;
+            this.modDesc.Text = resources.GetString("modDesc.Text");
+            // 
+            // modName
+            // 
+            this.modName.AutoSize = true;
+            this.modName.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modName.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.modName.Location = new System.Drawing.Point(2, -1);
+            this.modName.Name = "modName";
+            this.modName.Size = new System.Drawing.Size(87, 18);
+            this.modName.TabIndex = 1;
+            this.modName.Text = "mod name";
+            // 
+            // btmPanel
+            // 
+            this.btmPanel.Controls.Add(this.GameLocation);
+            this.btmPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btmPanel.Location = new System.Drawing.Point(0, 435);
+            this.btmPanel.Name = "btmPanel";
+            this.btmPanel.Size = new System.Drawing.Size(800, 15);
+            this.btmPanel.TabIndex = 6;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.boxImage;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(695, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(78, 78);
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
             // 
             // ExtractingBox
             // 
@@ -326,70 +368,82 @@
             this.toolStripButton6.Text = "Lower Mod In Order";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
-            // modName
+            // mergeModsToolStripMenuItem
             // 
-            this.modName.AutoSize = true;
-            this.modName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.modName.Location = new System.Drawing.Point(146, 3);
-            this.modName.Name = "modName";
-            this.modName.Size = new System.Drawing.Size(56, 13);
-            this.modName.TabIndex = 1;
-            this.modName.Text = "mod name";
+            this.mergeModsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mergeClothingToolStripMenuItem,
+            this.mergeVehiclesToolStripMenuItem,
+            this.mergeWeaponsToolStripMenuItem,
+            this.mergeStoresToolStripMenuItem,
+            this.mergeAllToolStripMenuItem});
+            this.mergeModsToolStripMenuItem.Name = "mergeModsToolStripMenuItem";
+            this.mergeModsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.mergeModsToolStripMenuItem.Text = "Merge Mod Tables";
             // 
-            // modDesc
+            // mergeClothingToolStripMenuItem
             // 
-            this.modDesc.AutoSize = true;
-            this.modDesc.Location = new System.Drawing.Point(146, 16);
-            this.modDesc.Name = "modDesc";
-            this.modDesc.Size = new System.Drawing.Size(211, 13);
-            this.modDesc.TabIndex = 2;
-            this.modDesc.Text = "mod description, lorem ipsum blah blah blah";
+            this.mergeClothingToolStripMenuItem.Name = "mergeClothingToolStripMenuItem";
+            this.mergeClothingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mergeClothingToolStripMenuItem.Text = "Merge Clothing";
             // 
-            // modVer
+            // mergeVehiclesToolStripMenuItem
             // 
-            this.modVer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.modVer.AutoSize = true;
-            this.modVer.Location = new System.Drawing.Point(712, 70);
-            this.modVer.Name = "modVer";
-            this.modVer.Size = new System.Drawing.Size(85, 13);
-            this.modVer.TabIndex = 3;
-            this.modVer.Text = "mod version: 1.0";
+            this.mergeVehiclesToolStripMenuItem.Name = "mergeVehiclesToolStripMenuItem";
+            this.mergeVehiclesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mergeVehiclesToolStripMenuItem.Text = "Merge Vehicles";
             // 
-            // btmPanel
+            // mergeWeaponsToolStripMenuItem
             // 
-            this.btmPanel.Controls.Add(this.GameLocation);
-            this.btmPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btmPanel.Location = new System.Drawing.Point(0, 435);
-            this.btmPanel.Name = "btmPanel";
-            this.btmPanel.Size = new System.Drawing.Size(800, 15);
-            this.btmPanel.TabIndex = 6;
+            this.mergeWeaponsToolStripMenuItem.Name = "mergeWeaponsToolStripMenuItem";
+            this.mergeWeaponsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mergeWeaponsToolStripMenuItem.Text = "Merge Weapons";
+            // 
+            // mergeStoresToolStripMenuItem
+            // 
+            this.mergeStoresToolStripMenuItem.Name = "mergeStoresToolStripMenuItem";
+            this.mergeStoresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mergeStoresToolStripMenuItem.Text = "Merge Stores";
+            // 
+            // mergeAllToolStripMenuItem
+            // 
+            this.mergeAllToolStripMenuItem.Name = "mergeAllToolStripMenuItem";
+            this.mergeAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mergeAllToolStripMenuItem.Text = "Merge All Above";
+            // 
+            // conflictCheckerModTablesOnlyToolStripMenuItem
+            // 
+            this.conflictCheckerModTablesOnlyToolStripMenuItem.Name = "conflictCheckerModTablesOnlyToolStripMenuItem";
+            this.conflictCheckerModTablesOnlyToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.conflictCheckerModTablesOnlyToolStripMenuItem.Text = "Conflict Checker (Mergeable Tables Only)";
+            this.conflictCheckerModTablesOnlyToolStripMenuItem.Click += new System.EventHandler(this.conflictCheckerModTablesOnlyToolStripMenuItem_Click);
             // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btmPanel);
             this.Controls.Add(this.modInfoPanel);
             this.Controls.Add(this.ExtractingBox);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.btmPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "mainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Saints Row 2: Juiced Patch Mod Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.mainForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.modInfoPanel.ResumeLayout(false);
             this.modInfoPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.modPicture)).EndInit();
             this.btmPanel.ResumeLayout(false);
             this.btmPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -422,11 +476,17 @@
         private System.Windows.Forms.ToolStripMenuItem swapBackToPreviousGameFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSaintsRow2ToolStripMenuItem;
         private System.Windows.Forms.Panel modInfoPanel;
-        private System.Windows.Forms.PictureBox modPicture;
-        private System.Windows.Forms.Label modVer;
         private System.Windows.Forms.Label modDesc;
         private System.Windows.Forms.Label modName;
         private System.Windows.Forms.Panel btmPanel;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolStripMenuItem mergeModsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mergeClothingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mergeVehiclesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mergeWeaponsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mergeStoresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mergeAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem conflictCheckerModTablesOnlyToolStripMenuItem;
     }
 }
 

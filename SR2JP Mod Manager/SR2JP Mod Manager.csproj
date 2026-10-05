@@ -138,6 +138,7 @@
     <None Include="Resources\raiseorder.png" />
     <None Include="Resources\lowerorder.png" />
     <None Include="Resources\PreviewIMG.jpg" />
+    <None Include="Resources\boxImage.png" />
     <Content Include="sr2jpmodmanager.ico" />
   </ItemGroup>
   <Target Name="GenerateGitInfo" BeforeTargets="BeforeBuild">

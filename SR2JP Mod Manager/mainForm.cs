@@ -245,6 +245,7 @@ namespace SR2JP_Mod_Manager
             // Initialize the Form Name w/ Previous Git Hash.
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
             // Initialise settings and such for the mod manager.
+            listView1.Height = ClientSize.Height - listView1.Top;
             GameLocation.Hide();
             ExtractingBox.Hide();
             modInfoPanel.Hide();
@@ -455,7 +456,16 @@ namespace SR2JP_Mod_Manager
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            modInfoPanel.Show();
+            if (listView1.SelectedItems.Count > 0)
+            {
+                modInfoPanel.Show();
+                UpdateListViewLayout();
+            }
+            else
+            {
+                modInfoPanel.Hide();
+                UpdateListViewLayout();
+            }
         }
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -737,6 +747,27 @@ namespace SR2JP_Mod_Manager
         }
 
         private void modInfoPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void UpdateListViewLayout()
+        {
+            int bottom;
+
+            if (modInfoPanel.Visible)
+                bottom = modInfoPanel.Top;
+            else
+                bottom = ClientSize.Height - 12;
+
+            listView1.Height = bottom - listView1.Top;
+        }
+        private void mainForm_Resize(object sender, EventArgs e)
+        {
+            UpdateListViewLayout();
+        }
+
+        private void conflictCheckerModTablesOnlyToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
