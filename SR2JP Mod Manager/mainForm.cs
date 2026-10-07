@@ -1,6 +1,7 @@
 ﻿// - [ mainForm.cs ] -
 // Created by Uzis: 3/29/2026
 
+using MadMilkman.Ini;
 using Microsoft.Win32;
 using SharpCompress.Common;
 using System;
@@ -25,6 +26,7 @@ namespace SR2JP_Mod_Manager
         string prevGameLocation = "";
         string gameLocation = "";
         private static Mutex mutex = null;
+        private Image defaultModImage;
 
 
         public mainForm()
@@ -232,6 +234,7 @@ namespace SR2JP_Mod_Manager
 
             mutex = new Mutex(true, appName, out createdNew);
 
+            defaultModImage = pictureBox1.Image;
 
             if (!createdNew)
             {
@@ -474,17 +477,108 @@ namespace SR2JP_Mod_Manager
             TitleEditsMade();
         }
 
+        private Image LoadImageUnlocked(string path)
+        {
+            using (FileStream stream = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite))
+            {
+                using (Image image = Image.FromStream(stream))
+                {
+                    return new Bitmap(image);
+                }
+            }
+        }
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
-            {
-                modInfoPanel.Show();
-                UpdateListViewLayout();
-            }
-            else
+            if (listView1.SelectedItems.Count == 0)
             {
                 modInfoPanel.Hide();
                 UpdateListViewLayout();
+                return;
+            }
+
+            ListViewItem selectedItem = listView1.SelectedItems[0];
+
+            string modPath = Global.SR2Location + "/" + selectedItem.Text;
+            string modIniPath = Path.Combine(modPath, "mod.ini");
+
+            if (!File.Exists(modIniPath))
+            {
+                modInfoPanel.Hide();
+                UpdateListViewLayout();
+                return;
+            }
+
+            try
+            {
+                IniFile ini = new IniFile();
+                ini.Load(modIniPath);
+
+                if (!ini.Sections.Contains("mod"))
+                {
+                    modInfoPanel.Hide();
+                    UpdateListViewLayout();
+                    return;
+                }
+
+                IniSection modSection = ini.Sections["mod"];
+
+                modName.Text = "";
+                modDesc.Text = "";
+
+                if (pictureBox1.Image != null &&
+                    pictureBox1.Image != defaultModImage)
+                {
+                    pictureBox1.Image.Dispose();
+                }
+
+                pictureBox1.Image = defaultModImage;
+
+                if (modSection.Keys.Contains("Title"))
+                {
+                    modName.Text = modSection.Keys["Title"].Value;
+                }
+
+                if (modSection.Keys.Contains("Description"))
+                {
+                    modDesc.Text = modSection.Keys["Description"].Value
+                        .Replace("/n", Environment.NewLine);
+                }
+
+                if (modSection.Keys.Contains("icon"))
+                {
+                    string iconValue = modSection.Keys["icon"].Value;
+
+                    if (!string.IsNullOrWhiteSpace(iconValue))
+                    {
+                        string iconPath =
+                            Path.Combine(modPath, iconValue);
+
+                        if (File.Exists(iconPath))
+                        {
+                            pictureBox1.Image =
+                                LoadImageUnlocked(iconPath);
+
+                            pictureBox1.SizeMode =
+                                PictureBoxSizeMode.Zoom;
+                        }
+                    }
+                }
+
+                modInfoPanel.Show();
+                UpdateListViewLayout();
+            }
+            catch (Exception ex)
+            {
+                modInfoPanel.Hide();
+                UpdateListViewLayout();
+
+                Debug.WriteLine(
+                    $"Failed to load mod.ini '{modIniPath}': {ex.Message}"
+                );
             }
         }
 

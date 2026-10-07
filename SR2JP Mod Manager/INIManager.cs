@@ -18,10 +18,7 @@ namespace SR2JP_Mod_Manager
             }
         }
 
-        public static void SetValue(
-            string section,
-            string key,
-            string keyValue)
+        public static void SetValue(string section, string key, string keyValue)
         {
             EnsureIniExists();
 
@@ -43,10 +40,7 @@ namespace SR2JP_Mod_Manager
             ini.Save(IniPath);
         }
 
-        public static string GetValue(
-            string section,
-            string key,
-            string keyValue = "")
+        public static string GetValue(string section, string key, string keyValue = "")
         {
             EnsureIniExists();
 
