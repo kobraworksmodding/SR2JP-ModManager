@@ -40,16 +40,16 @@ namespace SR2JP_Mod_Manager
             if (File.Exists(looseTxt))
             {
                 string[] looseMods = File.ReadAllLines(looseTxt);
-                listView1.Columns.Add("Load Order - Installed Mods", 9999); // Big width so list doesn't look awkward on most screens when maximized.
+                modList.Columns.Add("Load Order - Installed Mods", 9999); // Big width so list doesn't look awkward on most screens when maximized.
                 foreach (string mod in looseMods)
                 {
                     if (!string.IsNullOrEmpty(mod))
                     {
-                        listView1.Items.Add(mod);
+                        modList.Items.Add(mod);
 
                     }
                 }
-                foreach (ListViewItem item in listView1.Items)
+                foreach (ListViewItem item in modList.Items)
                 {
                     try
                     {
@@ -234,7 +234,7 @@ namespace SR2JP_Mod_Manager
 
             mutex = new Mutex(true, appName, out createdNew);
 
-            defaultModImage = pictureBox1.Image;
+            defaultModImage = modImage.Image;
 
             if (!createdNew)
             {
@@ -265,11 +265,11 @@ namespace SR2JP_Mod_Manager
                     originalPictureSizes[pictureBox] = pictureBox.Size;
                 }
             }
-            listView1.Height = ClientSize.Height - listView1.Top;
+            modList.Height = ClientSize.Height - modList.Top;
             GameLocation.Hide();
             ExtractingBox.Hide();
             modInfoPanel.Hide();
-            listView1.AllowDrop = true;
+            modList.AllowDrop = true;
             if (Directory.Exists(Global.appDataPath) && INIManager.ValueExists("General", "SecondaryGameDirectory"))
             {
                 string SGDCheck = INIManager.GetValue("General", "SecondaryGameDirectory");
@@ -321,7 +321,7 @@ namespace SR2JP_Mod_Manager
                 {
                     string folderText = f.ToString().Replace('\\', '/');
 
-                    var newItem = listView1.Items.Insert(0, folderText);
+                    var newItem = modList.Items.Insert(0, folderText);
 
                     if (IsTopLevelMod(folderText))
                         newItem.Checked = true;
@@ -355,7 +355,7 @@ namespace SR2JP_Mod_Manager
                 {
                     string folderText = f.ToString();
 
-                    var newItem = listView1.Items.Insert(0, folderText);
+                    var newItem = modList.Items.Insert(0, folderText);
 
                     newItem.Checked = true;
                 }
@@ -367,9 +367,9 @@ namespace SR2JP_Mod_Manager
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0) return;
+            if (modList.SelectedItems.Count == 0) return;
 
-            ListViewItem selectedItem = listView1.SelectedItems[0];
+            ListViewItem selectedItem = modList.SelectedItems[0];
             string curItem = selectedItem.Text;
 
             if (curItem.Equals("mods", StringComparison.OrdinalIgnoreCase))
@@ -398,15 +398,15 @@ namespace SR2JP_Mod_Manager
             }
 
             // Remove all ListView items that belong to this mod
-            for (int i = listView1.Items.Count - 1; i >= 0; i--)
+            for (int i = modList.Items.Count - 1; i >= 0; i--)
             {
-                ListViewItem item = listView1.Items[i];
+                ListViewItem item = modList.Items[i];
                 string itemText = item.Text.Replace('\\', '/'); // normalize slashes
 
                 if (itemText.StartsWith($"mods/{modRootName}/", StringComparison.OrdinalIgnoreCase) ||
                     itemText.Equals($"mods/{modRootName}", StringComparison.OrdinalIgnoreCase))
                 {
-                    listView1.Items.RemoveAt(i);
+                    modList.Items.RemoveAt(i);
                 }
             }
 
@@ -420,9 +420,9 @@ namespace SR2JP_Mod_Manager
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0) return;
+            if (modList.SelectedItems.Count == 0) return;
 
-            ListViewItem selectedItem = listView1.SelectedItems[0];
+            ListViewItem selectedItem = modList.SelectedItems[0];
             selectedItem.Checked = false;
             TitleEditsMade();
         }
@@ -434,16 +434,16 @@ namespace SR2JP_Mod_Manager
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0) return;
+            if (modList.SelectedItems.Count == 0) return;
 
-            ListViewItem selectedItem = listView1.SelectedItems[0];
+            ListViewItem selectedItem = modList.SelectedItems[0];
             int index = selectedItem.Index;
 
             if (index <= 0) return;
 
-            listView1.Items.RemoveAt(index);
+            modList.Items.RemoveAt(index);
 
-            listView1.Items.Insert(index - 1, selectedItem);
+            modList.Items.Insert(index - 1, selectedItem);
 
             selectedItem.Selected = true;
             selectedItem.Focused = true;
@@ -452,16 +452,16 @@ namespace SR2JP_Mod_Manager
 
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0) return;
+            if (modList.SelectedItems.Count == 0) return;
 
-            ListViewItem selectedItem = listView1.SelectedItems[0];
+            ListViewItem selectedItem = modList.SelectedItems[0];
             int index = selectedItem.Index;
 
-            if (index >= listView1.Items.Count - 1) return;
+            if (index >= modList.Items.Count - 1) return;
 
-            listView1.Items.RemoveAt(index);
+            modList.Items.RemoveAt(index);
 
-            listView1.Items.Insert(index + 1, selectedItem);
+            modList.Items.Insert(index + 1, selectedItem);
 
             selectedItem.Selected = true;
             selectedItem.Focused = true;
@@ -470,9 +470,9 @@ namespace SR2JP_Mod_Manager
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0) return;
+            if (modList.SelectedItems.Count == 0) return;
 
-            ListViewItem selectedItem = listView1.SelectedItems[0];
+            ListViewItem selectedItem = modList.SelectedItems[0];
             selectedItem.Checked = true;
             TitleEditsMade();
         }
@@ -493,14 +493,14 @@ namespace SR2JP_Mod_Manager
         }
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0)
+            if (modList.SelectedItems.Count == 0)
             {
                 modInfoPanel.Hide();
                 UpdateListViewLayout();
                 return;
             }
 
-            ListViewItem selectedItem = listView1.SelectedItems[0];
+            ListViewItem selectedItem = modList.SelectedItems[0];
 
             string modPath = Global.SR2Location + "/" + selectedItem.Text;
             string modIniPath = Path.Combine(modPath, "mod.ini");
@@ -529,13 +529,13 @@ namespace SR2JP_Mod_Manager
                 modName.Text = "";
                 modDesc.Text = "";
 
-                if (pictureBox1.Image != null &&
-                    pictureBox1.Image != defaultModImage)
+                if (modImage.Image != null &&
+                    modImage.Image != defaultModImage)
                 {
-                    pictureBox1.Image.Dispose();
+                    modImage.Image.Dispose();
                 }
 
-                pictureBox1.Image = defaultModImage;
+                modImage.Image = defaultModImage;
 
                 if (modSection.Keys.Contains("Title"))
                 {
@@ -559,10 +559,10 @@ namespace SR2JP_Mod_Manager
 
                         if (File.Exists(iconPath))
                         {
-                            pictureBox1.Image =
+                            modImage.Image =
                                 LoadImageUnlocked(iconPath);
 
-                            pictureBox1.SizeMode =
+                            modImage.SizeMode =
                                 PictureBoxSizeMode.Zoom;
                         }
                     }
@@ -594,7 +594,7 @@ namespace SR2JP_Mod_Manager
 
         public void SaveLoadOrder()
         {
-            if (listView1.Items.Count == 0)
+            if (modList.Items.Count == 0)
             {
                 MessageBox.Show("Cannot save! There is nothing in the load order!", "SR2JP Mod Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -609,7 +609,7 @@ namespace SR2JP_Mod_Manager
                 try
                 {
                     File.WriteAllText(LooseText, string.Empty);
-                    foreach (ListViewItem item in listView1.Items)
+                    foreach (ListViewItem item in modList.Items)
                     {
                         if (!item.Checked)
                         {
@@ -659,7 +659,7 @@ namespace SR2JP_Mod_Manager
             HashSet<string> existingItems = new HashSet<string>();
 
             // Normalize existing ListView items
-            foreach (ListViewItem item in listView1.Items)
+            foreach (ListViewItem item in modList.Items)
             {
                 existingItems.Add(Global.NormalizePathFmt(item.Text));
             }
@@ -675,7 +675,7 @@ namespace SR2JP_Mod_Manager
                 if (!existingItems.Contains(normalizedPath))
                 {
                     numFolders++;
-                    listView1.Items.Insert(0, displayPath);
+                    modList.Items.Insert(0, displayPath);
                     existingItems.Add(normalizedPath);
                 }
             }
@@ -694,7 +694,7 @@ namespace SR2JP_Mod_Manager
         private void listView1_ItemDrag(object sender, ItemDragEventArgs e)
         {
             draggedItem = (ListViewItem)e.Item;
-            listView1.DoDragDrop(e.Item, DragDropEffects.Move);
+            modList.DoDragDrop(e.Item, DragDropEffects.Move);
         }
 
         private void listView1_DragEnter(object sender, DragEventArgs e)
@@ -705,8 +705,8 @@ namespace SR2JP_Mod_Manager
 
         private void listView1_DragDrop(object sender, DragEventArgs e)
         {
-            Point cp = listView1.PointToClient(new Point(e.X, e.Y));
-            ListViewItem targetItem = listView1.GetItemAt(cp.X, cp.Y);
+            Point cp = modList.PointToClient(new Point(e.X, e.Y));
+            ListViewItem targetItem = modList.GetItemAt(cp.X, cp.Y);
 
             if (targetItem == null || draggedItem == null)
                 return;
@@ -722,16 +722,16 @@ namespace SR2JP_Mod_Manager
                 targetIndex++;
             }
             // Remove and insert at new position
-            listView1.Items.Remove(draggedItem);
-            listView1.Items.Insert(targetIndex, draggedItem);
+            modList.Items.Remove(draggedItem);
+            modList.Items.Insert(targetIndex, draggedItem);
             draggedItem.Selected = true;
             TitleEditsMade();
         }
 
         private void listView1_DragOver(object sender, DragEventArgs e)
         {
-            Point cp = listView1.PointToClient(new Point(e.X, e.Y));
-            ListViewItem hoverItem = listView1.GetItemAt(cp.X, cp.Y);
+            Point cp = modList.PointToClient(new Point(e.X, e.Y));
+            ListViewItem hoverItem = modList.GetItemAt(cp.X, cp.Y);
 
             if (hoverItem != null)
             {
@@ -763,16 +763,16 @@ namespace SR2JP_Mod_Manager
 
             if (e.KeyCode == Keys.W)
             {
-                if (listView1.SelectedItems.Count == 0) return;
+                if (modList.SelectedItems.Count == 0) return;
 
-                ListViewItem selectedItem = listView1.SelectedItems[0];
+                ListViewItem selectedItem = modList.SelectedItems[0];
                 int index = selectedItem.Index;
 
                 if (index <= 0) return;
 
-                listView1.Items.RemoveAt(index);
+                modList.Items.RemoveAt(index);
 
-                listView1.Items.Insert(index - 1, selectedItem);
+                modList.Items.Insert(index - 1, selectedItem);
 
                 selectedItem.Selected = true;
                 selectedItem.Focused = true;
@@ -781,16 +781,16 @@ namespace SR2JP_Mod_Manager
 
             if (e.KeyCode == Keys.S)
             {
-                if (listView1.SelectedItems.Count == 0) return;
+                if (modList.SelectedItems.Count == 0) return;
 
-                ListViewItem selectedItem = listView1.SelectedItems[0];
+                ListViewItem selectedItem = modList.SelectedItems[0];
                 int index = selectedItem.Index;
 
-                if (index >= listView1.Items.Count - 1) return;
+                if (index >= modList.Items.Count - 1) return;
 
-                listView1.Items.RemoveAt(index);
+                modList.Items.RemoveAt(index);
 
-                listView1.Items.Insert(index + 1, selectedItem);
+                modList.Items.Insert(index + 1, selectedItem);
 
                 selectedItem.Selected = true;
                 selectedItem.Focused = true;
@@ -799,16 +799,16 @@ namespace SR2JP_Mod_Manager
 
             if (e.KeyCode == Keys.Enter)
             {
-                ListViewItem selectedItem = listView1.SelectedItems[0];
+                ListViewItem selectedItem = modList.SelectedItems[0];
                 if (selectedItem.Checked == true)
                 {
-                    if (listView1.SelectedItems.Count == 0) return;
+                    if (modList.SelectedItems.Count == 0) return;
                     selectedItem.Checked = false;
                     TitleEditsMade();
                 }
                 else
                 {
-                    if (listView1.SelectedItems.Count == 0) return;
+                    if (modList.SelectedItems.Count == 0) return;
                     selectedItem.Checked = true;
                     TitleEditsMade();
                 }
@@ -996,8 +996,8 @@ namespace SR2JP_Mod_Manager
                 ? modInfoPanel.Top
                 : ClientSize.Height - bottomMargin;
 
-            listView1.Height =
-                Math.Max(0, bottom - listView1.Top);
+            modList.Height =
+                Math.Max(0, bottom - modList.Top);
         }
         private void mainForm_Resize(object sender, EventArgs e)
         {

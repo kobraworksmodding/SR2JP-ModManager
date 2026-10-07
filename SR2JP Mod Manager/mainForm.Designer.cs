@@ -57,10 +57,10 @@
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.modList = new System.Windows.Forms.ListView();
             this.FindMod = new System.Windows.Forms.OpenFileDialog();
             this.modInfoPanel = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.modImage = new System.Windows.Forms.PictureBox();
             this.modDesc = new System.Windows.Forms.Label();
             this.modName = new System.Windows.Forms.Label();
             this.btmPanel = new System.Windows.Forms.Panel();
@@ -68,7 +68,7 @@
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.modInfoPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.modImage)).BeginInit();
             this.btmPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -319,34 +319,34 @@
             this.toolStripButton6.Text = "Lower Mod In Order";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
-            // listView1
+            // modList
             // 
-            this.listView1.AllowColumnReorder = true;
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.modList.AllowColumnReorder = true;
+            this.modList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BackColor = System.Drawing.Color.White;
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 52);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(800, 294);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
-            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
-            this.listView1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.listView1_ItemDrag);
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
-            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
-            this.listView1.DragOver += new System.Windows.Forms.DragEventHandler(this.listView1_DragOver);
-            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
-            this.listView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
+            this.modList.BackColor = System.Drawing.Color.White;
+            this.modList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.modList.CheckBoxes = true;
+            this.modList.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modList.FullRowSelect = true;
+            this.modList.GridLines = true;
+            this.modList.HideSelection = false;
+            this.modList.Location = new System.Drawing.Point(0, 52);
+            this.modList.MultiSelect = false;
+            this.modList.Name = "modList";
+            this.modList.Size = new System.Drawing.Size(800, 294);
+            this.modList.TabIndex = 3;
+            this.modList.UseCompatibleStateImageBehavior = false;
+            this.modList.View = System.Windows.Forms.View.Details;
+            this.modList.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.listView1_ColumnReordered);
+            this.modList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
+            this.modList.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.listView1_ItemDrag);
+            this.modList.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.modList.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
+            this.modList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
+            this.modList.DragOver += new System.Windows.Forms.DragEventHandler(this.listView1_DragOver);
+            this.modList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
+            this.modList.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
             // 
             // FindMod
             // 
@@ -359,7 +359,7 @@
             this.modInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.modInfoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.modInfoPanel.Controls.Add(this.pictureBox1);
+            this.modInfoPanel.Controls.Add(this.modImage);
             this.modInfoPanel.Controls.Add(this.modDesc);
             this.modInfoPanel.Controls.Add(this.modName);
             this.modInfoPanel.Location = new System.Drawing.Point(0, 349);
@@ -368,17 +368,17 @@
             this.modInfoPanel.TabIndex = 5;
             this.modInfoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.modInfoPanel_Paint);
             // 
-            // pictureBox1
+            // modImage
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.modImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.boxImage;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(695, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(78, 78);
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
+            this.modImage.BackgroundImage = global::SR2JP_Mod_Manager.Properties.Resources.boxImage;
+            this.modImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.modImage.Location = new System.Drawing.Point(695, 3);
+            this.modImage.Name = "modImage";
+            this.modImage.Size = new System.Drawing.Size(78, 78);
+            this.modImage.TabIndex = 3;
+            this.modImage.TabStop = false;
             // 
             // modDesc
             // 
@@ -427,7 +427,7 @@
             this.Controls.Add(this.btmPanel);
             this.Controls.Add(this.modInfoPanel);
             this.Controls.Add(this.ExtractingBox);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.modList);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -443,7 +443,7 @@
             this.toolStrip1.PerformLayout();
             this.modInfoPanel.ResumeLayout(false);
             this.modInfoPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.modImage)).EndInit();
             this.btmPanel.ResumeLayout(false);
             this.btmPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -470,7 +470,7 @@
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem creditsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem conflictCheckerToolStripMenuItem;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView modList;
         private System.Windows.Forms.OpenFileDialog FindMod;
         private System.Windows.Forms.Panel ExtractingBox;
         private System.Windows.Forms.ToolStripMenuItem scanForModsNotInLoadOrderToolStripMenuItem;
@@ -481,7 +481,7 @@
         private System.Windows.Forms.Label modDesc;
         private System.Windows.Forms.Label modName;
         private System.Windows.Forms.Panel btmPanel;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox modImage;
         private System.Windows.Forms.ToolStripMenuItem mergeModsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mergeClothingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mergeVehiclesToolStripMenuItem;
