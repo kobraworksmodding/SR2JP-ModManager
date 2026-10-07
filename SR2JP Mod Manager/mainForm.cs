@@ -253,7 +253,6 @@ namespace SR2JP_Mod_Manager
 
                 if (control is Label label)
                 {
-                    originalLabelWidths[label] = label.Width;
                     originalLabelSizes[label] = label.Size;
                 }
 
@@ -786,9 +785,6 @@ namespace SR2JP_Mod_Manager
         private readonly Dictionary<Control, Point> originalLocations =
             new Dictionary<Control, Point>();
 
-        private readonly Dictionary<Label, int> originalLabelWidths =
-            new Dictionary<Label, int>();
-
         private readonly Dictionary<PictureBox, Size> originalPictureSizes =
             new Dictionary<PictureBox, Size>();
 
@@ -881,28 +877,22 @@ namespace SR2JP_Mod_Manager
                 ClientSize.Width >= 1000 &&
                 ClientSize.Height >= 400;
 
-            // Set panel height first
+
             modInfoPanel.Height = largeWindow ? 224 : 86;
 
-            // Keep panel attached to bottom
             modInfoPanel.Top =
                 ClientSize.Height -
                 bottomMargin -
                 modInfoPanel.Height;
 
-            // Only rescale controls when changing between
-            // small and large layouts.
             if (largeWindow != modInfoLarge)
             {
                 ScaleModInfoContents(largeWindow);
                 modInfoLarge = largeWindow;
             }
 
-            // IMPORTANT:
-            // Do this EVERY resize, regardless of large/small mode.
             PositionModInfoPictureBoxes();
 
-            // ListView fills remaining space
             int bottom = modInfoPanel.Visible
                 ? modInfoPanel.Top
                 : ClientSize.Height - bottomMargin;
