@@ -231,6 +231,7 @@ namespace SR2JP_Mod_Manager
 
             mutex = new Mutex(true, appName, out createdNew);
 
+
             if (!createdNew)
             {
                 MessageBox.Show("There is already an instance of SR2JP Mod Manager running.", "SR2JP Mod Manager");
@@ -245,6 +246,22 @@ namespace SR2JP_Mod_Manager
             // Initialize the Form Name w/ Previous Git Hash.
             this.Text = $"Saints Row 2: Juiced Patch Mod Manager {{prc:{GitInfo.Hash}}}";
             // Initialise settings and such for the mod manager.
+            foreach (Control control in modInfoPanel.Controls)
+            {
+                originalFonts[control] = control.Font;
+                originalLocations[control] = control.Location;
+
+                if (control is Label label)
+                {
+                    originalLabelWidths[label] = label.Width;
+                    originalLabelSizes[label] = label.Size;
+                }
+
+                if (control is PictureBox pictureBox)
+                {
+                    originalPictureSizes[pictureBox] = pictureBox.Size;
+                }
+            }
             listView1.Height = ClientSize.Height - listView1.Top;
             GameLocation.Hide();
             ExtractingBox.Hide();
@@ -750,21 +767,153 @@ namespace SR2JP_Mod_Manager
         {
 
         }
+        
+        // Smart Scalar for mod info (Can repurpose this in the future to a slider rather than just a static scale based on window scale
+        // but it covers all bases and if we support banners or other images for the panel that's already sorted with what room is there.
+        private bool modInfoLarge = false;
+        private const float LargeFontScale = 1.4f;
+        private const float LargeLabelWidthScale = 1.8f;
+        private const float LargeLabelHeightScale = 2.1f;
+        private const float LargeLabelYScale = 1.5f;
+        private const int LargeLabelXOffset = 0;
+        private const float LargePictureScale = 2.4f;
+        private const float LargePictureYScale = 1.5f;
+        private const int PictureRightMargin = 20;
+
+        private readonly Dictionary<Control, Font> originalFonts =
+            new Dictionary<Control, Font>();
+
+        private readonly Dictionary<Control, Point> originalLocations =
+            new Dictionary<Control, Point>();
+
+        private readonly Dictionary<Label, int> originalLabelWidths =
+            new Dictionary<Label, int>();
+
+        private readonly Dictionary<PictureBox, Size> originalPictureSizes =
+            new Dictionary<PictureBox, Size>();
+
+        private readonly Dictionary<Label, Size> originalLabelSizes =
+            new Dictionary<Label, Size>();
+
+        private void PositionModInfoPictureBoxes()
+        {
+            foreach (PictureBox pictureBox in originalPictureSizes.Keys)
+            {
+                pictureBox.Left =
+                    modInfoPanel.ClientSize.Width -
+                    pictureBox.Width -
+                    PictureRightMargin;
+            }
+        }
+
+        private void ScaleModInfoContents(bool large)
+        {
+            modInfoPanel.SuspendLayout();
+
+            try
+            {
+                foreach (Control control in modInfoPanel.Controls)
+                {
+                    Font originalFont = originalFonts[control];
+                    Point originalLocation = originalLocations[control];
+
+                    control.Font = large
+                        ? new Font(
+                            originalFont.FontFamily,
+                            originalFont.Size * LargeFontScale,
+                            originalFont.Style,
+                            originalFont.Unit)
+                        : originalFont;
+
+                    if (control is Label label)
+                    {
+                        Size originalSize = originalLabelSizes[label];
+
+                        label.Left = large
+                            ? originalLocation.X + LargeLabelXOffset
+                            : originalLocation.X;
+
+                        label.Top = large
+                            ? (int)(originalLocation.Y * LargeLabelYScale)
+                            : originalLocation.Y;
+
+                        label.Width = large
+                            ? (int)(originalSize.Width * LargeLabelWidthScale)
+                            : originalSize.Width;
+
+                        label.Height = large
+                            ? (int)(originalSize.Height * LargeLabelHeightScale)
+                            : originalSize.Height;
+                    }
+
+                    else if (control is PictureBox pictureBox)
+                    {
+                        Size originalSize = originalPictureSizes[pictureBox];
+
+                        pictureBox.Size = large
+                            ? new Size(
+                                (int)(originalSize.Width * LargePictureScale),
+                                (int)(originalSize.Height * LargePictureScale))
+                            : originalSize;
+
+                        pictureBox.Top = large
+                            ? (int)(originalLocation.Y * LargePictureYScale)
+                            : originalLocation.Y;
+                    }
+
+                    else
+                    {
+                        control.Location = originalLocation;
+                    }
+                }
+            }
+            finally
+            {
+                modInfoPanel.ResumeLayout();
+            }
+        }
 
         private void UpdateListViewLayout()
         {
-            int bottom;
+            const int bottomMargin = 12;
 
-            if (modInfoPanel.Visible)
-                bottom = modInfoPanel.Top;
-            else
-                bottom = ClientSize.Height - 12;
+            bool largeWindow =
+                ClientSize.Width >= 1000 &&
+                ClientSize.Height >= 400;
 
-            listView1.Height = bottom - listView1.Top;
+            // Set panel height first
+            modInfoPanel.Height = largeWindow ? 224 : 86;
+
+            // Keep panel attached to bottom
+            modInfoPanel.Top =
+                ClientSize.Height -
+                bottomMargin -
+                modInfoPanel.Height;
+
+            // Only rescale controls when changing between
+            // small and large layouts.
+            if (largeWindow != modInfoLarge)
+            {
+                ScaleModInfoContents(largeWindow);
+                modInfoLarge = largeWindow;
+            }
+
+            // IMPORTANT:
+            // Do this EVERY resize, regardless of large/small mode.
+            PositionModInfoPictureBoxes();
+
+            // ListView fills remaining space
+            int bottom = modInfoPanel.Visible
+                ? modInfoPanel.Top
+                : ClientSize.Height - bottomMargin;
+
+            listView1.Height =
+                Math.Max(0, bottom - listView1.Top);
         }
         private void mainForm_Resize(object sender, EventArgs e)
         {
             UpdateListViewLayout();
+
         }
 
         private void conflictCheckerModTablesOnlyToolStripMenuItem_Click(object sender, EventArgs e)
