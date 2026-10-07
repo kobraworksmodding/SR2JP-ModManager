@@ -2,6 +2,7 @@
 // Created by Uzis: 3/29/2026
 
 using Microsoft.Win32;
+using SharpCompress.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,13 +97,13 @@ namespace SR2JP_Mod_Manager
                     {
                         Directory.CreateDirectory(Global.appDataPath);
                     }
-                    File.WriteAllText($"{Global.appDataPath}\\settings.txt", filePath); // Create a simple settings.txt with our SR2 directory path that we can also edit later.
+                    INIManager.SetValue("General", "PrimaryGameDirectory", filePath);
                     Global.SR2Location = filePath;
 
                     gameLocation = Global.SR2Location;  
                     if (calledFrom == 2)
                     {
-                        File.WriteAllText($"{Global.appDataPath}\\recent.txt", prevGameLocation);
+                        INIManager.SetValue("General", "SecondaryGameDirectory", prevGameLocation);
                     }
  
                 }
@@ -136,7 +137,7 @@ namespace SR2JP_Mod_Manager
                 {
                     Directory.CreateDirectory(Global.appDataPath);
                 }
-                File.WriteAllText($"{Global.appDataPath}\\settings.txt", steamGame);
+                INIManager.SetValue("General", "PrimaryGameDirectory", steamGame);
 
             }
             else
@@ -239,7 +240,7 @@ namespace SR2JP_Mod_Manager
                 return;
             }
 
-            if (!Directory.Exists(Global.appDataPath) || !File.Exists($"{Global.appDataPath}\\settings.txt"))
+            if (!Directory.Exists(Global.appDataPath) || !File.Exists($"{Global.appDataPath}\\options.ini"))
             {
                 ScanSR2Install(); // Scan for Steam and/or GOG installs
             }
@@ -266,14 +267,17 @@ namespace SR2JP_Mod_Manager
             ExtractingBox.Hide();
             modInfoPanel.Hide();
             listView1.AllowDrop = true;
-            if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\recent.txt"))
+            if (Directory.Exists(Global.appDataPath) && INIManager.ValueExists("General", "SecondaryGameDirectory"))
             {
-                swapBackToPreviousGameFolderToolStripMenuItem.Visible = true;
+                string SGDCheck = INIManager.GetValue("General", "SecondaryGameDirectory");
+                if (!string.IsNullOrEmpty(SGDCheck))
+                    swapBackToPreviousGameFolderToolStripMenuItem.Visible = true;
+                    swapBackToPreviousGameFolderToolStripMenuItem.Text = ("Swap to (" + SGDCheck + ")");
             }
 
-            if (Directory.Exists(Global.appDataPath) && File.Exists($"{Global.appDataPath}\\settings.txt"))
+            if (Directory.Exists(Global.appDataPath) && INIManager.ValueExists("General", "PrimaryGameDirectory"))
             {
-                Global.SR2Location = File.ReadAllText($"{Global.appDataPath}\\settings.txt");
+                Global.SR2Location = INIManager.GetValue("General", "PrimaryGameDirectory");
                 if (!string.IsNullOrEmpty(Global.SR2Location))
                 {
                     PerformStartupThings();
@@ -736,9 +740,10 @@ namespace SR2JP_Mod_Manager
 
         private void swapBackToPreviousGameFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string oldtonewpath = File.ReadAllText($"{Global.appDataPath}\\recent.txt");
-            File.WriteAllText($"{Global.appDataPath}\\settings.txt", oldtonewpath);
-            File.WriteAllText($"{Global.appDataPath}\\recent.txt", Global.SR2Location);
+            string oldtonewpath = INIManager.GetValue("General", "SecondaryGameDirectory");
+            INIManager.SetValue("General", "PrimaryGameDirectory", oldtonewpath);
+            INIManager.SetValue("General", "SecondaryGameDirectory", Global.SR2Location);
+
             Application.Restart();
         }
 

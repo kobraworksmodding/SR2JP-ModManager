@@ -93,6 +93,7 @@
     <Compile Include="FileChecker.cs" />
     <Compile Include="GitInfo.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="INIManager.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
