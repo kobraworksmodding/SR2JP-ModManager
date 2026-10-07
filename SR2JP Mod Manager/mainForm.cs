@@ -545,7 +545,7 @@ namespace SR2JP_Mod_Manager
                 if (modSection.Keys.Contains("Description"))
                 {
                     modDesc.Text = modSection.Keys["Description"].Value
-                        .Replace("/n", Environment.NewLine);
+                         .Replace("\\n", Environment.NewLine);
                 }
 
                 if (modSection.Keys.Contains("icon"))

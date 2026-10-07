@@ -169,6 +169,7 @@
             // 
             // conflictCheckerModTablesOnlyToolStripMenuItem
             // 
+            this.conflictCheckerModTablesOnlyToolStripMenuItem.Enabled = false;
             this.conflictCheckerModTablesOnlyToolStripMenuItem.Name = "conflictCheckerModTablesOnlyToolStripMenuItem";
             this.conflictCheckerModTablesOnlyToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.conflictCheckerModTablesOnlyToolStripMenuItem.Text = "Conflict Checker (Mergeable Tables Only)";
@@ -182,6 +183,7 @@
             this.mergeWeaponsToolStripMenuItem,
             this.mergeStoresToolStripMenuItem,
             this.mergeAllToolStripMenuItem});
+            this.mergeModsToolStripMenuItem.Enabled = false;
             this.mergeModsToolStripMenuItem.Name = "mergeModsToolStripMenuItem";
             this.mergeModsToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.mergeModsToolStripMenuItem.Text = "Merge Mod Tables";
@@ -189,31 +191,31 @@
             // mergeClothingToolStripMenuItem
             // 
             this.mergeClothingToolStripMenuItem.Name = "mergeClothingToolStripMenuItem";
-            this.mergeClothingToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.mergeClothingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mergeClothingToolStripMenuItem.Text = "Merge Clothing";
             // 
             // mergeVehiclesToolStripMenuItem
             // 
             this.mergeVehiclesToolStripMenuItem.Name = "mergeVehiclesToolStripMenuItem";
-            this.mergeVehiclesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.mergeVehiclesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mergeVehiclesToolStripMenuItem.Text = "Merge Vehicles";
             // 
             // mergeWeaponsToolStripMenuItem
             // 
             this.mergeWeaponsToolStripMenuItem.Name = "mergeWeaponsToolStripMenuItem";
-            this.mergeWeaponsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.mergeWeaponsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mergeWeaponsToolStripMenuItem.Text = "Merge Weapons";
             // 
             // mergeStoresToolStripMenuItem
             // 
             this.mergeStoresToolStripMenuItem.Name = "mergeStoresToolStripMenuItem";
-            this.mergeStoresToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.mergeStoresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mergeStoresToolStripMenuItem.Text = "Merge Stores";
             // 
             // mergeAllToolStripMenuItem
             // 
             this.mergeAllToolStripMenuItem.Name = "mergeAllToolStripMenuItem";
-            this.mergeAllToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.mergeAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mergeAllToolStripMenuItem.Text = "Merge All Above";
             // 
             // scanForModsNotInLoadOrderToolStripMenuItem
